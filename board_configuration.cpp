@@ -1,5 +1,5 @@
-#include "pch.h"
 #include "board_overrides.h"
+#include "pch.h"
 
 Gpio getCommsLedPin() { return Gpio::B7; }
 
@@ -21,11 +21,11 @@ static void customBoardDefaultConfiguration() {
   engineConfiguration->injectionPins[2] = Gpio::B14; // Injector 3
   engineConfiguration->injectionPins[3] = Gpio::B13; // Injector 4
 
-  // ========== TRIGGER INPUTS ==========
   engineConfiguration->triggerInputPins[0] =
       Gpio::D3; // CKP - Crankshaft Position
   engineConfiguration->triggerInputPins[1] =
-      Gpio::D4; // CMP - Camshaft Position
+      Gpio::Unassigned; // CMP - Camshaft Position (Unassigned to avoid
+                        // conflict)
 
   // ========== SENSOR ADC CHANNELS ==========
   engineConfiguration->map.sensor.hwChannel = EFI_ADC_0; // MAP sensor on PA0
