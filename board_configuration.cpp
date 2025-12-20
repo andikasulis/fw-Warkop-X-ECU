@@ -1,5 +1,7 @@
+#include "board_configuration.h"
 #include "board_overrides.h"
 #include "pch.h"
+#include <ch.hpp>
 
 Gpio getCommsLedPin() { return Gpio::B7; }
 
