@@ -57,23 +57,26 @@ jobs:
         run: |
           TIMESTAMP="${{steps.set-variables.outputs.build_timestamp}}"
           
-          # Handle main firmware artifacts
-          find . -type f \( -name "rusefi.bin" -o -name "rusefi.hex" -o -name "rusefi.elf" -o -name "rusefi.srec" -o -name "rusefi*.map" -o -name "rusefi*.list" \) | while read file; do
-            dir=$(dirname "$file")
-            filename=$(basename "$file")
-            ext="${filename##*.}"
-            newname="rusefi_warkop_x_${TIMESTAMP}.${ext}"
-            cp "$file" "$dir/$newname"
-            echo "✓ Copied for upload: $file -> $dir/$newname"
-          done
+          # Handle main firmware artifacts specifically from the bin folder
+          # These are the definitive outputs
+          if [ -d "bin" ]; then
+            cd bin/
+            for file in rusefi.*; do
+              if [ -f "$file" ]; then
+                ext="${file##*.}"
+                cp "$file" "rusefi_warkop_x_${TIMESTAMP}.${ext}"
+                echo "✓ Copied for upload from bin/: $file -> rusefi_warkop_x_${TIMESTAMP}.${ext}"
+              fi
+            done
+            cd ..
+          fi
           
-          # Also handle files that might already have warkop_x in name in generated/
-          find generated/tunerstudio/generated -type f -name "rusefi_warkop_x.ini" | while read file; do
-            dir=$(dirname "$file")
-            newname="rusefi_warkop_x_${TIMESTAMP}.ini"
-            cp "$file" "$dir/$newname"
-            echo "✓ Copied for upload: $file -> $dir/$newname"
-          done
+          # Also handle the INI file specifically
+          INI_FILE="generated/tunerstudio/generated/rusefi_warkop_x.ini"
+          if [ -f "$INI_FILE" ]; then
+            cp "$INI_FILE" "generated/tunerstudio/generated/rusefi_warkop_x_${TIMESTAMP}.ini"
+            echo "✓ Copied for upload: $INI_FILE -> rusefi_warkop_x_${TIMESTAMP}.ini"
+          fi
         shell: bash
         continue-on-error: true
 
@@ -82,21 +85,21 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.bin
-          path: "**/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.bin"
+          path: "bin/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.bin"
           if-no-files-found: warn
 
       - name: Upload Renamed .hex
         uses: actions/upload-artifact@v4
         with:
           name: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.hex
-          path: "**/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.hex"
+          path: "bin/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.hex"
           if-no-files-found: warn
 
       - name: Upload Renamed .srec
         uses: actions/upload-artifact@v4
         with:
           name: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.srec
-          path: "**/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.srec"
+          path: "bin/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.srec"
           if-no-files-found: warn
 
       # Upload INI file as separate artifact with clear .ini extension in name
