@@ -4,6 +4,54 @@
 #pragma once
 
 Gpio GENERATED_OUTPUTS = {
-	Gpio::B14, // B14 Output
-// "B14 Output",
+	Gpio::E15, // Ignition Output 1 (E15)
+	Gpio::E14, // Ignition Output 2 (E14)
+	Gpio::D13, // Ignition Output 3 (D13)
+	Gpio::E5, // Ignition Output 4 (E5)
+	Gpio::D8, // Injector 1 (D8)
+	Gpio::B15, // Injector 2 (B15)
+	Gpio::B14, // Injector 3 (B14)
+	Gpio::B13, // Injector 4 (B13)
+	Gpio::C8, // Fuel Pump Relay (C8)
+	Gpio::A15, // Fan Relay (A15)
+	Gpio::C7, // AC Compressor Relay (C7)
+	Gpio::E8, // Main Relay (E8)
+	Gpio::D9, // Idle Control 1 (D9)
+	Gpio::C9, // Tacho Output (C9)
+	Gpio::B7, // Comms LED (B7)
+	Gpio::C12, // SPI3 MOSI - SD Card (C12)
+	Gpio::C11, // SPI3 MISO - SD Card (C11)
+	Gpio::C10, // SPI3 SCK - SD Card (C10)
+	Gpio::D2, // SD Card Chip Select (D2)
+	Gpio::D1, // CAN TX (D1)
+	Gpio::D0, // CAN RX (D0)
+	Gpio::A9, // UART1 TX (A9)
+	Gpio::A10, // UART1 RX (A10)
+	Gpio::B10, // UART3 TX (B10)
+	Gpio::B11, // UART3 RX (B11)
+// "Ignition Output 1 (E15)",
+// "Ignition Output 2 (E14)",
+// "Ignition Output 3 (D13)",
+// "Ignition Output 4 (E5)",
+// "Injector 1 (D8)",
+// "Injector 2 (B15)",
+// "Injector 3 (B14)",
+// "Injector 4 (B13)",
+// "Fuel Pump Relay (C8)",
+// "Fan Relay (A15)",
+// "AC Compressor Relay (C7)",
+// "Main Relay (E8)",
+// "Idle Control 1 (D9)",
+// "Tacho Output (C9)",
+// "Comms LED (B7)",
+// "SPI3 MOSI - SD Card (C12)",
+// "SPI3 MISO - SD Card (C11)",
+// "SPI3 SCK - SD Card (C10)",
+// "SD Card Chip Select (D2)",
+// "CAN TX (D1)",
+// "CAN RX (D0)",
+// "UART1 TX (A9)",
+// "UART1 RX (A10)",
+// "UART3 TX (B10)",
+// "UART3 RX (B11)",
 }

@@ -6,10 +6,35 @@
 // see comments at declaration in pin_repository.h
 const char * getBoardSpecificPinName(brain_pin_e brainPin) {
 	switch(brainPin) {
-		case Gpio::B14: return "B14 Output";
-		case Gpio::E2: return "VR/Hall 1 (E2)";
-		case Gpio::E3: return "VR/Hall 2 (E3)";
-		case Gpio::E4: return "VR/Hall 3 (E4)";
+		case Gpio::A10: return "UART1 RX (A10)";
+		case Gpio::A15: return "Fan Relay (A15)";
+		case Gpio::A9: return "UART1 TX (A9)";
+		case Gpio::B10: return "UART3 TX (B10)";
+		case Gpio::B11: return "UART3 RX (B11)";
+		case Gpio::B13: return "Injector 4 (B13)";
+		case Gpio::B14: return "Injector 3 (B14)";
+		case Gpio::B15: return "Injector 2 (B15)";
+		case Gpio::B7: return "Comms LED (B7)";
+		case Gpio::C10: return "SPI3 SCK - SD Card (C10)";
+		case Gpio::C11: return "SPI3 MISO - SD Card (C11)";
+		case Gpio::C12: return "SPI3 MOSI - SD Card (C12)";
+		case Gpio::C7: return "AC Compressor Relay (C7)";
+		case Gpio::C8: return "Fuel Pump Relay (C8)";
+		case Gpio::C9: return "Tacho Output (C9)";
+		case Gpio::D0: return "CAN RX (D0)";
+		case Gpio::D1: return "CAN TX (D1)";
+		case Gpio::D13: return "Ignition Output 3 (D13)";
+		case Gpio::D2: return "SD Card Chip Select (D2)";
+		case Gpio::D3: return "CKP - Crankshaft Position Sensor (D3)";
+		case Gpio::D4: return "CMP - Camshaft Position Sensor (D4)";
+		case Gpio::D7: return "VSS - Vehicle Speed Sensor (D7)";
+		case Gpio::D8: return "Injector 1 (D8)";
+		case Gpio::D9: return "Idle Control 1 (D9)";
+		case Gpio::E13: return "Clutch Input (E13)";
+		case Gpio::E14: return "Ignition Output 2 (E14)";
+		case Gpio::E15: return "Ignition Output 1 (E15)";
+		case Gpio::E5: return "Ignition Output 4 (E5)";
+		case Gpio::E8: return "Main Relay (E8)";
 		default: return nullptr;
 	}
 	return nullptr;
