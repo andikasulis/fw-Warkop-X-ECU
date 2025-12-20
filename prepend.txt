@@ -4,3 +4,8 @@
 
 ! example of table size override
 #define IGN_TRIM_SIZE 8
+
+! Custom signature with timestamp (format: YYYY.MM.DD_HH-MM)
+! This will be used by gen_signature.sh if SIGNATURE_DATE env var is set
+! Otherwise falls back to default date-only format
+export SIGNATURE_DATE=${RUSEFI_BUILD_DATE}

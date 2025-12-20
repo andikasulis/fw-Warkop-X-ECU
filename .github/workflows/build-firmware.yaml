@@ -10,6 +10,8 @@ on:
 jobs:
   build-firmware:
     runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Jakarta  # Set timezone to WIB (UTC+7)
     steps:
       - uses: actions/checkout@v4
         with:
@@ -18,12 +20,14 @@ jobs:
       - name: Set run variables
         id: set-variables
         run: |
+          BUILD_TIMESTAMP=$(date +'%Y-%m-%d_%H-%M')
+          echo "build_timestamp=${BUILD_TIMESTAMP}" >> $GITHUB_OUTPUT
           if [ "${{github.event_name}}" = "schedule" ]; then
-            echo "release_date=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+            echo "release_date=${BUILD_TIMESTAMP}" >> $GITHUB_ENV
           fi
           if [ "${{github.event_name}}" == "push" -o "${{github.event_name}}" == "schedule" -o "${{github.event_name}}" == "workflow_dispatch" ] && [ "${{github.ref}}" == "refs/heads/master" -o "${{github.ref}}" == "refs/heads/main" ]; then
             echo 'extra_makefile_targets=build_both_bundles' >> $GITHUB_OUTPUT
-            # uncomment this line for upload! echo 'upload=ftp_upload_bundles' >> $GITHUB_OUTPUT
+            echo 'upload=ftp_upload_bundles' >> $GITHUB_OUTPUT
             echo 'push=true' >> $GITHUB_OUTPUT
             echo 'sim=true' >> $GITHUB_OUTPUT
           else
@@ -31,10 +35,18 @@ jobs:
             echo 'sim=false' >> $GITHUB_OUTPUT
           fi
 
+      # Run custom signature generation before main build
+      - name: Generate custom signature with timestamp
+        run: |
+          export RUSEFI_BUILD_DATE="${{steps.set-variables.outputs.build_timestamp}}"
+          export TZ=Asia/Jakarta
+          bash custom_signature_gen.sh
+        shell: bash
+
       - uses: ./ext/rusefi/.github/workflows/custom-board-build
         with:
           new_tag: ${{steps.set-variables.outputs.release_date}}
-          artifacts: bin
+          artifacts: bin srec hex list map elf bundle autoupdate
           # see above about un-commenting
           uploads: ini ${{steps.set-variables.outputs.upload}}
           push: ${{steps.set-variables.outputs.push}}
@@ -46,4 +58,28 @@ jobs:
           RUSEFI_SSH_SERVER: ${{secrets.RUSEFI_SSH_SERVER}}
           RUSEFI_SSH_USER: ${{secrets.RUSEFI_SSH_USER}}
           RUSEFI_SSH_PASS: ${{secrets.RUSEFI_SSH_PASS}}
-          ADDITIONAL_ENV: ${{secrets.ADDITIONAL_ENV}}
+          ADDITIONAL_ENV: RUSEFI_BUILD_DATE=${{steps.set-variables.outputs.build_timestamp}}
+
+      # Rename binary files with timestamp for version tracking
+      - name: Rename binaries with build timestamp
+        run: |
+          TIMESTAMP="${{steps.set-variables.outputs.build_timestamp}}"
+          cd bin/
+          # Rename all firmware artifacts with timestamp
+          for file in rusefi_warkop_x.*; do
+            if [ -f "$file" ]; then
+              ext="${file##*.}"
+              mv "$file" "rusefi_warkop_x_${TIMESTAMP}.${ext}"
+              echo "Renamed: $file -> rusefi_warkop_x_${TIMESTAMP}.${ext}"
+            fi
+          done
+        shell: bash
+        continue-on-error: true
+
+      # Upload INI file as separate artifact (not in zip) for easy access
+      - name: Upload INI file separately
+        uses: actions/upload-artifact@v4
+        with:
+          name: rusefi_warkop_x_ini_${{steps.set-variables.outputs.build_timestamp}}
+          path: generated/tunerstudio/generated/rusefi_warkop_x.ini
+          if-no-files-found: warn
