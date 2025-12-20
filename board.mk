@@ -17,10 +17,12 @@ DDEFS += -DRAM_UNUSED_SIZE=100
 # Enable ADC2 for additional analog input channels
 DDEFS += -DSTM32_ADC_USE_ADC2=TRUE
 
-# ========== MCU VARIANT CONFIGURATION (VET6 - 512KB Flash) ==========
 # Define STM32F407xE for VET6 variant (512KB flash instead of VGT6's 1024KB)
 # The linker script will automatically use correct flash size from MCU definition
-DDEFS += -DSTM32F407xE
+DDEFS += -DSTM32F407xE -DBOARD_EXPECTED_FLASH_SIZE=512
+
+# Override linker script for VET6
+LDSCRIPT = $(BOARD_DIR)/STM32F407VET6.ld
 
 # ========== DISABLE HIGH IMPACT FEATURES (Save ~75-113 KB) ==========
 # Disable Lua scripting (saves 40-60 KB, CAN dashboard still works!)
