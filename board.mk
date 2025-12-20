@@ -17,6 +17,13 @@ DDEFS += -DRAM_UNUSED_SIZE=100
 # Enable ADC2 for additional analog input channels
 DDEFS += -DSTM32_ADC_USE_ADC2=TRUE
 
+# ========== MCU VARIANT CONFIGURATION (VET6 - 512KB Flash) ==========
+# Override default VGT6 (1024K) to VET6 (512K) flash size
+# This defines the correct MCU variant for linker and eliminates TunerStudio warning
+DDEFS += -DSTM32F407xE
+# Also define minimum flash size expected
+DDEFS += -DMIN_FLASH_SIZE=524288
+
 # ========== DISABLE HIGH IMPACT FEATURES (Save ~75-113 KB) ==========
 # Disable Lua scripting (saves 40-60 KB, CAN dashboard still works!)
 DDEFS += -DEFI_LUA=FALSE
