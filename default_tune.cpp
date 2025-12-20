@@ -5,25 +5,25 @@ void boardTuneDefaults() {
   // Yamaha Vixion OLD 3C1 - 200cc Single Cylinder
   engineConfiguration->displacement = 0.2; // 200cc in Liters
   engineConfiguration->cylindersCount = 1;
-  engineConfiguration->firingOrder = FO_1;
+  engineConfiguration->firingOrder = firing_order_e::FO_1;
   engineConfiguration->cylinderBore = 87.5; // mm
 
   // ========== COMPRESSION & FUEL ==========
   engineConfiguration->compressionRatio = 9.0;
   engineConfiguration->fuelAlgorithm =
-      LM_ALPHA_N; // Alpha-N for single cylinder
+      engine_load_mode_e::LM_ALPHA_N; // Alpha-N for single cylinder
 
   // ========== INJECTOR CONFIGURATION ==========
   engineConfiguration->injector.flow = 180.0; // cc/min
-  engineConfiguration->injectionMode = IM_SEQUENTIAL;
+  engineConfiguration->injectionMode = injection_mode_e::IM_SEQUENTIAL;
 
   // ========== IGNITION CONFIGURATION ==========
-  engineConfiguration->ignitionMode = IM_INDIVIDUAL_COILS;
+  engineConfiguration->ignitionMode = ignition_mode_e::IM_INDIVIDUAL_COILS;
   engineConfiguration->timing_offset_cylinder[0] = 0;
 
   // ========== TRIGGER CONFIGURATION ==========
   // 12-1 toothed wheel (custom)
-  engineConfiguration->trigger.type = TT_TOOTHED_WHEEL;
+  engineConfiguration->trigger.type = trigger_type_e::TT_TOOTHED_WHEEL;
   engineConfiguration->trigger.customTotalToothCount = 12;
   engineConfiguration->trigger.customSkippedToothCount = 1;
   engineConfiguration->globalTriggerAngleOffset = 186.0;
@@ -34,7 +34,7 @@ void boardTuneDefaults() {
 
   // ========== IDLE CONFIGURATION ==========
   // Cold idle ~1360 RPM, warm idle ~900 RPM (from MSQ)
-  engineConfiguration->idleMode = IM_AUTO;
+  engineConfiguration->idleMode = idle_mode_e::IM_AUTO;
   engineConfiguration->idleRpmPid.pFactor = 0.05;
   engineConfiguration->idleRpmPid.iFactor = 0.002;
 
