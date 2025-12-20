@@ -57,19 +57,18 @@ jobs:
         run: |
           TIMESTAMP="${{steps.set-variables.outputs.build_timestamp}}"
           
-          # Cari file firmware tapi abaikan folder ext/ (submodule) agar tidak duplikat
-          # Kita mencari di root dan folder bin/ tapi bukan di dalam ext/
-          find . -maxdepth 3 -not -path "*/ext/*" -type f \( -name "rusefi.bin" -o -name "rusefi.hex" -o -name "rusefi.srec" \) | while read file; do
+          # Cari file firmware di folder build rusefi (di dalam ext)
+          # Kita ambil yang di folder firmware karena itu yang paling akurat sizenya (297KB)
+          find ext/rusefi/firmware/ -type f \( -name "rusefi.bin" -o -name "rusefi.hex" -o -name "rusefi.srec" \) | while read file; do
             filename=$(basename "$file")
             ext="${filename##*.}"
             newname="rusefi_warkop_x_${TIMESTAMP}.${ext}"
-            # Copy ke root agar mudah ditemukan oleh step upload
             cp "$file" "$newname"
-            echo "✓ Ready for upload: $newname (from $file)"
+            echo "✓ Ready for upload: $newname (found in $file)"
           done
           
-          # Handle INI file
-          INI_PATH=$(find . -name "rusefi_warkop_x.ini" | head -n 1)
+          # Handle INI file - cari di folder generated
+          INI_PATH=$(find generated/ -name "rusefi_warkop_x.ini" | head -n 1)
           if [ -n "$INI_PATH" ]; then
             cp "$INI_PATH" "rusefi_warkop_x_${TIMESTAMP}.ini"
             echo "✓ Ready for upload: rusefi_warkop_x_${TIMESTAMP}.ini"
