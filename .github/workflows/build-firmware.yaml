@@ -77,15 +77,26 @@ jobs:
         shell: bash
         continue-on-error: true
 
-      # Upload Renamed Binaries as separate artifacts
-      - name: Upload Renamed Binaries
+      # Upload Renamed Binaries as separate individual artifacts
+      - name: Upload Renamed .bin
         uses: actions/upload-artifact@v4
         with:
-          name: firmware_binaries_${{steps.set-variables.outputs.build_timestamp}}
-          path: |
-            **/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.bin
-            **/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.hex
-            **/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.srec
+          name: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.bin
+          path: "**/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.bin"
+          if-no-files-found: warn
+
+      - name: Upload Renamed .hex
+        uses: actions/upload-artifact@v4
+        with:
+          name: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.hex
+          path: "**/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.hex"
+          if-no-files-found: warn
+
+      - name: Upload Renamed .srec
+        uses: actions/upload-artifact@v4
+        with:
+          name: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.srec
+          path: "**/rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.srec"
           if-no-files-found: warn
 
       # Upload INI file as separate artifact with clear .ini extension in name
