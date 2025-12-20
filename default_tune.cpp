@@ -43,21 +43,13 @@ void boardTuneDefaults() {
   engineConfiguration->fanOffTemperature = 88; // °C
 
   // ========== CRANKING PARAMETERS ==========
-  engineConfiguration->cranking.baseFuel = 7.4;   // mg
+  // Note: cranking.baseFuel removed in newer RusEfi - using firmware defaults
   engineConfiguration->crankingTimingAngle = 6.0; // degrees
   engineConfiguration->ignitionDwellForCrankingMs = 6.0;
 
   // ========== SPARK DWELL ==========
-  // Average dwell ~3.5ms across RPM range
-  engineConfiguration->sparkDwellRpmBins[0] = 1000;
-  engineConfiguration->sparkDwellRpmBins[1] = 3000;
-  engineConfiguration->sparkDwellRpmBins[2] = 5000;
-  engineConfiguration->sparkDwellRpmBins[3] = 7000;
-
-  engineConfiguration->sparkDwellValues[0] = 4.0;
-  engineConfiguration->sparkDwellValues[1] = 3.5;
-  engineConfiguration->sparkDwellValues[2] = 3.2;
-  engineConfiguration->sparkDwellValues[3] = 3.0;
+  // Note: sparkDwellRpmBins/Values removed in newer RusEfi - using firmware
+  // defaults Default dwell configuration is managed by the firmware
 
   // ========== VEHICLE INFO ==========
   strcpy(engineConfiguration->engineMake, "Yamaha");
