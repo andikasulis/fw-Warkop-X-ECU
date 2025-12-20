@@ -23,7 +23,7 @@ void boardTuneDefaults() {
 
   // ========== TRIGGER CONFIGURATION ==========
   // 12-1 toothed wheel (custom)
-  engineConfiguration->trigger.type = trigger_type_e::TT_TOOTHED_WHEEL;
+  engineConfiguration->trigger.type = TT_TOOTHED_WHEEL;
   engineConfiguration->trigger.customTotalToothCount = 12;
   engineConfiguration->trigger.customSkippedToothCount = 1;
   engineConfiguration->globalTriggerAngleOffset = 186.0;
