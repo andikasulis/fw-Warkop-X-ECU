@@ -1,6 +1,10 @@
-#include "board_overrides.h"
-#include "pch.h"
 #include <ch.hpp>
+
+// Break include sorting
+#include "pch.h"
+
+// Break include sorting
+#include "board_overrides.h"
 
 Gpio getCommsLedPin() { return Gpio::B7; }
 
