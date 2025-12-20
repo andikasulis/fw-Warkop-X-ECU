@@ -1,4 +1,3 @@
-#include "board_configuration.h"
 #include "board_overrides.h"
 #include "pch.h"
 #include <ch.hpp>
@@ -63,6 +62,7 @@ static void customBoardDefaultConfiguration() {
   engineConfiguration->analogInputDividerCoefficient = 1.47f;
 
   // ========== ADC REFERENCE VOLTAGE ==========
+  // STM32 usually runs at 3.3V
   engineConfiguration->adcVcc = 3.3f;
 
   // ========== THERMISTOR CONFIGURATION ==========
@@ -84,16 +84,12 @@ static void customBoardDefaultConfiguration() {
   engineConfiguration->canRxPin = Gpio::D0;
 
   // ========== UART CONFIGURATION ==========
-  // UART1 - Primary serial communication
-  // TX: PA9, RX: PA10 (handled by RusEfi automatically when enabled)
-
-  // UART3 - Secondary serial communication
-  // TX: PB10, RX: PB11 (handled by RusEfi automatically when enabled)
+  // UART1 - Primary serial communication (Console/TS)
+  // TX: PA9, RX: PA10
 }
 
 void customBoardTsAction(uint16_t subSystem, uint16_t index) {
   // Custom TunerStudio command handler
-  // Add custom commands here as needed
 }
 
 void setup_custom_board_overrides() {
