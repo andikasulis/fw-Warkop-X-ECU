@@ -67,14 +67,20 @@ jobs:
           BIN_SRC=$(ls bin/rusefi.bin 2>/dev/null || ls rusefi.bin 2>/dev/null || find . -name "rusefi.bin" | head -n 1)
           if [ -n "$BIN_SRC" ]; then
             cp "$BIN_SRC" "rusefi_warkop_x_${TIMESTAMP}.bin"
-            echo "✓ BINARY: $BIN_SRC ($(du -h $BIN_SRC | cut -f1)) -> rusefi_warkop_x_${TIMESTAMP}.bin"
+            SIZE_BYTES=$(stat -c%s "$BIN_SRC")
+            echo "✓ BINARY FOUND: $BIN_SRC"
+            echo "  - Size: $SIZE_BYTES bytes (Expect ~304000 for 297KB)"
+            echo "  - Renamed to: rusefi_warkop_x_${TIMESTAMP}.bin"
           fi
 
           # Target file .hex (~474KB)
           HEX_SRC=$(ls bin/rusefi.hex 2>/dev/null || ls rusefi.hex 2>/dev/null || find . -name "rusefi.hex" | head -n 1)
           if [ -n "$HEX_SRC" ]; then
             cp "$HEX_SRC" "rusefi_warkop_x_${TIMESTAMP}.hex"
-            echo "✓ HEX: $HEX_SRC ($(du -h $HEX_SRC | cut -f1)) -> rusefi_warkop_x_${TIMESTAMP}.hex"
+            SIZE_BYTES=$(stat -c%s "$HEX_SRC")
+            echo "✓ HEX FOUND: $HEX_SRC"
+            echo "  - Size: $SIZE_BYTES bytes (Expect ~485000 for 474KB)"
+            echo "  - Renamed to: rusefi_warkop_x_${TIMESTAMP}.hex"
           fi
 
           # Target file .ini (~138KB)
