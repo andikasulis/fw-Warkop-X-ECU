@@ -19,7 +19,7 @@ DDEFS += -DSTM32_ADC_USE_ADC2=TRUE
 
 # Define STM32F407xE for VET6 variant (512KB flash instead of VGT6's 1024KB)
 # The linker script will automatically use correct flash size from MCU definition
-DDEFS += -DSTM32F407xE -DBOARD_EXPECTED_FLASH_SIZE=512
+DDEFS += -DSTM32F407xE -DBOARD_EXPECTED_FLASH_SIZE=512 -DEXPECTED_BOARD_FLASH_SIZE=512 -DMIN_FLASH_SIZE=512
 
 # Override linker script for VET6
 LDSCRIPT = $(BOARD_DIR)/STM32F407VET6.ld
