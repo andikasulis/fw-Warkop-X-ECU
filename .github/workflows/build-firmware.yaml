@@ -52,56 +52,54 @@ jobs:
           RUSEFI_SSH_PASS: ${{secrets.RUSEFI_SSH_PASS}}
           ADDITIONAL_ENV: RUSEFI_BUILD_DATE=${{steps.set-variables.outputs.build_timestamp}}
 
-      # Rename binary files with timestamp for version tracking
-      - name: Rename binaries and INI with build timestamp
+      # Rename binary files with surgical precision
+      - name: Prepare Precise Artifacts
         run: |
           TIMESTAMP="${{steps.set-variables.outputs.build_timestamp}}"
           
-          # Cari file firmware di folder build rusefi (di dalam ext)
-          # Kita ambil yang di folder firmware karena itu yang paling akurat sizenya (297KB)
-          find ext/rusefi/firmware/ -type f \( -name "rusefi.bin" -o -name "rusefi.hex" -o -name "rusefi.srec" \) | while read file; do
-            filename=$(basename "$file")
-            ext="${filename##*.}"
-            newname="rusefi_warkop_x_${TIMESTAMP}.${ext}"
-            cp "$file" "$newname"
-            echo "✓ Ready for upload: $newname (found in $file)"
-          done
+          # 1. Cari binary asli (297KB) - biasanya ada di folder build rusefi
+          # Kita cari secara kumulatif tapi laporkan sizenya
+          echo "=== Debug: Checking file sizes ==="
+          ls -l rusefi* 2>/dev/null || true
+          ls -l bin/rusefi* 2>/dev/null || true
           
-          # Handle INI file - cari di folder generated
-          INI_PATH=$(find generated/ -name "rusefi_warkop_x.ini" | head -n 1)
-          if [ -n "$INI_PATH" ]; then
-            cp "$INI_PATH" "rusefi_warkop_x_${TIMESTAMP}.ini"
-            echo "✓ Ready for upload: rusefi_warkop_x_${TIMESTAMP}.ini"
+          # Target file .bin (HARUS ~297KB)
+          BIN_SRC=$(ls bin/rusefi.bin 2>/dev/null || ls rusefi.bin 2>/dev/null || find . -name "rusefi.bin" | head -n 1)
+          if [ -n "$BIN_SRC" ]; then
+            cp "$BIN_SRC" "rusefi_warkop_x_${TIMESTAMP}.bin"
+            echo "✓ BINARY: $BIN_SRC ($(du -h $BIN_SRC | cut -f1)) -> rusefi_warkop_x_${TIMESTAMP}.bin"
+          fi
+
+          # Target file .hex (~474KB)
+          HEX_SRC=$(ls bin/rusefi.hex 2>/dev/null || ls rusefi.hex 2>/dev/null || find . -name "rusefi.hex" | head -n 1)
+          if [ -n "$HEX_SRC" ]; then
+            cp "$HEX_SRC" "rusefi_warkop_x_${TIMESTAMP}.hex"
+            echo "✓ HEX: $HEX_SRC ($(du -h $HEX_SRC | cut -f1)) -> rusefi_warkop_x_${TIMESTAMP}.hex"
+          fi
+
+          # Target file .ini (~138KB)
+          INI_SRC=$(find . -name "rusefi_warkop_x.ini" | head -n 1)
+          if [ -n "$INI_SRC" ]; then
+            cp "$INI_SRC" "rusefi_warkop_x_${TIMESTAMP}.ini"
+            echo "✓ INI: $INI_SRC ($(du -h $INI_SRC | cut -f1)) -> rusefi_warkop_x_${TIMESTAMP}.ini"
           fi
         shell: bash
-        continue-on-error: true
 
-      # Upload each renamed file as a separate individual artifact for direct access
-      - name: Upload Individual .bin
+      # Upload Individual Artifacts with Very Clear Names
+      - name: Upload BINARY (.bin)
         uses: actions/upload-artifact@v4
         with:
-          name: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.bin
+          name: Firmware_BINARY_297KB_${{steps.set-variables.outputs.build_timestamp}}
           path: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.bin
-          if-no-files-found: warn
 
-      - name: Upload Individual .hex
+      - name: Upload HEX (.hex)
         uses: actions/upload-artifact@v4
         with:
-          name: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.hex
+          name: Firmware_HEX_474KB_${{steps.set-variables.outputs.build_timestamp}}
           path: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.hex
-          if-no-files-found: warn
 
-      - name: Upload Individual .srec
+      - name: Upload TunerStudio INI
         uses: actions/upload-artifact@v4
         with:
-          name: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.srec
-          path: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.srec
-          if-no-files-found: warn
-
-      # Upload INI file as separate artifact with clear .ini extension in name
-      - name: Upload INI artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.ini
+          name: TunerStudio_INI_${{steps.set-variables.outputs.build_timestamp}}
           path: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.ini
-          if-no-files-found: warn
