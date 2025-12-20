@@ -35,14 +35,6 @@ jobs:
             echo 'sim=false' >> $GITHUB_OUTPUT
           fi
 
-      # Run custom signature generation before main build
-      - name: Generate custom signature with timestamp
-        run: |
-          export RUSEFI_BUILD_DATE="${{steps.set-variables.outputs.build_timestamp}}"
-          export TZ=Asia/Jakarta
-          bash custom_signature_gen.sh
-        shell: bash
-
       - uses: ./ext/rusefi/.github/workflows/custom-board-build
         with:
           new_tag: ${{steps.set-variables.outputs.release_date}}
