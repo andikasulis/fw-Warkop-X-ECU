@@ -5,7 +5,7 @@ Custom RusEfi firmware for **Yamaha Vixion OLD (3C1)** 200cc single cylinder mot
 **Board:** Warkop X ECU R1  
 **MCU:** STM32F407VGT6 (1024 KB flash)  
 **Firmware Version:** 0.1  
-**Binary Size:** 297 KB (29% flash usage)
+**Binary Size:** 611 KB (60% flash usage)  
 
 > **📌 STM32F407VET6 Variant (512 KB flash):** See [README_VET6.md](README_VET6.md) for VET6-specific build instructions. In this branch, the firmware is capped at **384 KB** to protect the settings sector!
 
@@ -178,10 +178,10 @@ The following features are **disabled** to save flash memory (~95-143 KB saved):
 
 **Flash Usage:**
 ```
-Binary Size:  297 KB
+Binary Size:  611 KB
 Flash Total:  1024 KB
-Flash Used:   29%
-Free Space:   727 KB (71%)
+Flash Used:   60%
+Free Space:   413 KB (40%)
 ```
 
 **Build Status:**  

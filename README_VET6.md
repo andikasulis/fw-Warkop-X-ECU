@@ -8,9 +8,9 @@ This branch is specifically configured for **STM32F407VET6** (512 KB flash) inst
 |-----------|-------------|---------------------|
 | Flash Size | 1024 KB | **512 KB** |
 | RAM | 192 KB | 192 KB (same) |
-| Binary Size | 297 KB | **384 KB** |
-| Flash Usage | 29% | **75%** |
-| Free Space | 727 KB (71%) | **128 KB (25%)** |
+| Binary Size | **611 KB** | **384 KB** (Fixed) |
+| Flash Usage | 60% | **75%** |
+| Free Space | 413 KB (40%) | **128 KB (25%)** |
 
 ## Build Instructions
 
