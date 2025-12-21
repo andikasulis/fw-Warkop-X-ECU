@@ -4,7 +4,7 @@
 
 MEMORY
 {
-    flash0 (rx) : org = 0x08000000, len = 512k
+    flash0 (rx) : org = 0x08000000, len = 384k
     ram0   (wx) : org = 0x20000000, len = 128k
     ram1   (wx) : org = 0x20020000, len = 0k
     ram2   (wx) : org = 0x2001c000, len = 16k
