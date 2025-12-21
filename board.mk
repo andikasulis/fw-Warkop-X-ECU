@@ -40,6 +40,16 @@ DDEFS += -DEFI_VVT=FALSE
 # Disable Antilag System (street bike, not needed)
 DDEFS += -DEFI_ANTILAG_SYSTEM=FALSE
 
+# Disable SD Card support (saves ~15-20KB)
+DDEFS += -DEFI_USB_MASS_STORAGE=FALSE -DEFI_STORAGE_SD=FALSE
+
+# Disable GDI features (only for direct injection)
+DDEFS += -DEFI_GDI=FALSE
+
+# Disable more non-essential features (Save ~30-50KB)
+DDEFS += -DEFI_LAUNCH_CONTROL=FALSE -DEFI_HPFP=FALSE
+DDEFS += -DEFI_LOGIC_ANALYZER=FALSE -DEFI_DYNO_VIEW=FALSE
+
 # ========== OPTIONAL FEATURES ==========
 # Uncomment to enable knock detection (requires knock sensor + adds ~15-20KB)
 # DDEFS += -DEFI_SOFTWARE_KNOCK=TRUE
