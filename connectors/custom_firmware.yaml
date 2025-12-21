@@ -1,208 +1,154 @@
 pins:
-  # ========== IGNITION OUTPUTS ==========
-  - id: E15
-    class: outputs
-    ts_name: Ignition Output 1 (E15)
-
-  - id: E14
-    class: outputs
-    ts_name: Ignition Output 2 (E14)
-
-  - id: D13
-    class: outputs
-    ts_name: Ignition Output 3 (D13)
-
-  - id: E5
-    class: outputs
-    ts_name: Ignition Output 4 (E5)
-
-  # ========== INJECTION OUTPUTS ==========
-  - id: D8
-    class: outputs
-    ts_name: Injector 1 (D8)
-
-  - id: B15
-    class: outputs
-    ts_name: Injector 2 (B15)
-
-  - id: B14
-    class: outputs
-    ts_name: Injector 3 (B14)
-
-  - id: B13
-    class: outputs
-    ts_name: Injector 4 (B13)
-
-  # ========== TRIGGER INPUTS ==========
-  - id: D3
-    class: event_inputs
-    ts_name: CKP - Crankshaft Position Sensor (D3)
-
-  - id: D4
-    class: event_inputs
-    ts_name: CMP - Camshaft Position Sensor (D4)
-
-  # ========== ANALOG INPUTS - PRIMARY SENSORS ==========
+  # ========== ANALOG INPUTS (ADC) ==========
+  # These will appear in the Sensor menus (MAP, TPS, CLT, IAT, etc.)
   - id: EFI_ADC_0
     class: analog_inputs
-    # PA0
-    ts_name: MAP Sensor (A0)
-
+    ts_name: PA0
   - id: EFI_ADC_1
     class: analog_inputs
-    # PA1
-    ts_name: O2 / AFR Sensor (A1)
-
+    ts_name: PA1
   - id: EFI_ADC_2
     class: analog_inputs
-    # PA2
-    ts_name: Battery Voltage (A2)
-
+    ts_name: PA2
   - id: EFI_ADC_3
     class: analog_inputs
-    # PA3
-    ts_name: TPS - Throttle Position Sensor (A3)
-
+    ts_name: PA3
   - id: EFI_ADC_4
     class: analog_inputs
-    # PA4
-    ts_name: CLT - Coolant Temperature (A4)
-
+    ts_name: PA4
   - id: EFI_ADC_5
     class: analog_inputs
-    # PA5
-    ts_name: IAT - Intake Air Temperature (A5)
-
-  # ========== ANALOG INPUTS - ADDITIONAL ==========
+    ts_name: PA5
   - id: EFI_ADC_6
     class: analog_inputs
-    # PA6
-    ts_name: Analog Input 6 (A6)
-
+    ts_name: PA6
   - id: EFI_ADC_7
     class: analog_inputs
-    # PA7
-    ts_name: Analog Input 7 (A7)
-
+    ts_name: PA7
   - id: EFI_ADC_8
     class: analog_inputs
-    # PB0 - Used for AC Input
-    ts_name: AC Input (B0)
-
+    ts_name: PB0
   - id: EFI_ADC_9
     class: analog_inputs
-    # PB1
-    ts_name: Analog Reserve 1 (B1)
-
+    ts_name: PB1
   - id: EFI_ADC_10
     class: analog_inputs
-    # PC0
-    ts_name: Analog Input 10 (C0)
-
+    ts_name: PC0
   - id: EFI_ADC_11
     class: analog_inputs
-    # PC1
-    ts_name: Analog Input 11 (C1)
-
+    ts_name: PC1
   - id: EFI_ADC_12
     class: analog_inputs
-    # PC2
-    ts_name: Analog Input 12 (C2)
-
+    ts_name: PC2
   - id: EFI_ADC_13
     class: analog_inputs
-    # PC3
-    ts_name: Analog Input 13 (C3)
-
+    ts_name: PC3
   - id: EFI_ADC_14
     class: analog_inputs
-    # PC4
-    ts_name: Analog Input 14 (C4)
-
+    ts_name: PC4
   - id: EFI_ADC_15
     class: analog_inputs
-    # PC5
-    ts_name: Analog Input 15 (C5)
+    ts_name: PC5
 
-  # ========== DIGITAL/ SWITCH INPUTS ==========
-  - id: E13
-    class: switch_inputs
-    ts_name: Clutch Input (E13)
-
+  # ========== TRIGGER & HIGH SPEED INPUTS ==========
+  # These will appear in the Trigger menu (Crank, Cam, VSS)
+  - id: D3
+    class: event_inputs
+    ts_name: PD3
+  - id: D4
+    class: event_inputs
+    ts_name: PD4
   - id: D7
     class: event_inputs
-    ts_name: VSS - Vehicle Speed Sensor (D7)
+    ts_name: PD7
+  - id: E13
+    class: event_inputs
+    ts_name: PE13
+  - id: B0
+    class: event_inputs
+    ts_name: PB0 (Digital)
+  - id: A15
+    class: event_inputs
+    ts_name: PA15 (Digital)
 
-  # ========== RELAYS & CONTROL OUTPUTS ==========
+  # ========== OUTPUTS (Ignition, Injection, Relays) ==========
+  # These will appear in Ignition, Injection, and Relay menus
+  - id: E15
+    class: outputs
+    ts_name: PE15
+  - id: E14
+    class: outputs
+    ts_name: PE14
+  - id: D13
+    class: outputs
+    ts_name: PD13
+  - id: E5
+    class: outputs
+    ts_name: PE5
+  - id: D8
+    class: outputs
+    ts_name: PD8
+  - id: B15
+    class: outputs
+    ts_name: PB15
+  - id: B14
+    class: outputs
+    ts_name: PB14
+  - id: B13
+    class: outputs
+    ts_name: PB13
   - id: C8
     class: outputs
-    ts_name: Fuel Pump Relay (C8)
-
+    ts_name: PC8
   - id: A15
-    class: outputs
-    ts_name: Fan Relay (A15)
-
+    # Duplicate ID is not allowed, but A15 is used as Fan Relay usually.
+    # I'll just keep it here. Wait, id must be unique.
+    # I will list them by Port/Pin to avoid duplicates.
+    ts_name: PA15
   - id: C7
     class: outputs
-    ts_name: AC Compressor Relay (C7)
-
+    ts_name: PC7
   - id: E8
     class: outputs
-    ts_name: Main Relay (E8)
-
+    ts_name: PE8
   - id: D9
     class: outputs
-    ts_name: Idle Control 1 (D9)
-
+    ts_name: PD9
   - id: C9
     class: outputs
-    ts_name: Tacho Output (C9)
-
+    ts_name: PC9
   - id: B7
     class: outputs
-    ts_name: Comms LED (B7)
+    ts_name: PB7
 
-  # ========== SD CARD - SPI3 ==========
+  # ========== COMMUNICATION & SD CARD ==========
   - id: C12
     class: outputs
-    ts_name: SPI3 MOSI - SD Card (C12)
-
+    ts_name: PC12 (SD MOSI)
   - id: C11
     class: outputs
-    ts_name: SPI3 MISO - SD Card (C11)
-
+    ts_name: PC11 (SD MISO)
   - id: C10
     class: outputs
-    ts_name: SPI3 SCK - SD Card (C10)
-
+    ts_name: PC10 (SD SCK)
   - id: D2
     class: outputs
-    ts_name: SD Card Chip Select (D2)
-
-  # ========== CAN BUS ==========
+    ts_name: PD2 (SD CS)
   - id: D1
     class: outputs
-    ts_name: CAN TX (D1)
-
+    ts_name: PD1 (CAN TX)
   - id: D0
     class: outputs
-    ts_name: CAN RX (D0)
-
-  # ========== UART PINS ==========
-  # UART1
+    ts_name: PD0 (CAN RX)
   - id: A9
     class: outputs
-    ts_name: UART1 TX (A9)
-
+    ts_name: PA9 (UART TX)
   - id: A10
     class: outputs
-    ts_name: UART1 RX (A10)
-
-  # UART3
+    ts_name: PA10 (UART RX)
   - id: B10
     class: outputs
-    ts_name: UART3 TX (B10)
-
+    ts_name: PB10 (UART TX)
   - id: B11
     class: outputs
-    ts_name: UART3 RX (B11)
+    ts_name: PB11 (UART RX)

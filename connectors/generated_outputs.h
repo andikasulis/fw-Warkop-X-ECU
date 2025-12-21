@@ -4,54 +4,52 @@
 #pragma once
 
 Gpio GENERATED_OUTPUTS = {
-	Gpio::E15, // Ignition Output 1 (E15)
-	Gpio::E14, // Ignition Output 2 (E14)
-	Gpio::D13, // Ignition Output 3 (D13)
-	Gpio::E5, // Ignition Output 4 (E5)
-	Gpio::D8, // Injector 1 (D8)
-	Gpio::B15, // Injector 2 (B15)
-	Gpio::B14, // Injector 3 (B14)
-	Gpio::B13, // Injector 4 (B13)
-	Gpio::C8, // Fuel Pump Relay (C8)
-	Gpio::A15, // Fan Relay (A15)
-	Gpio::C7, // AC Compressor Relay (C7)
-	Gpio::E8, // Main Relay (E8)
-	Gpio::D9, // Idle Control 1 (D9)
-	Gpio::C9, // Tacho Output (C9)
-	Gpio::B7, // Comms LED (B7)
-	Gpio::C12, // SPI3 MOSI - SD Card (C12)
-	Gpio::C11, // SPI3 MISO - SD Card (C11)
-	Gpio::C10, // SPI3 SCK - SD Card (C10)
-	Gpio::D2, // SD Card Chip Select (D2)
-	Gpio::D1, // CAN TX (D1)
-	Gpio::D0, // CAN RX (D0)
-	Gpio::A9, // UART1 TX (A9)
-	Gpio::A10, // UART1 RX (A10)
-	Gpio::B10, // UART3 TX (B10)
-	Gpio::B11, // UART3 RX (B11)
-// "Ignition Output 1 (E15)",
-// "Ignition Output 2 (E14)",
-// "Ignition Output 3 (D13)",
-// "Ignition Output 4 (E5)",
-// "Injector 1 (D8)",
-// "Injector 2 (B15)",
-// "Injector 3 (B14)",
-// "Injector 4 (B13)",
-// "Fuel Pump Relay (C8)",
-// "Fan Relay (A15)",
-// "AC Compressor Relay (C7)",
-// "Main Relay (E8)",
-// "Idle Control 1 (D9)",
-// "Tacho Output (C9)",
-// "Comms LED (B7)",
-// "SPI3 MOSI - SD Card (C12)",
-// "SPI3 MISO - SD Card (C11)",
-// "SPI3 SCK - SD Card (C10)",
-// "SD Card Chip Select (D2)",
-// "CAN TX (D1)",
-// "CAN RX (D0)",
-// "UART1 TX (A9)",
-// "UART1 RX (A10)",
-// "UART3 TX (B10)",
-// "UART3 RX (B11)",
+	Gpio::E15, // PE15
+	Gpio::E14, // PE14
+	Gpio::D13, // PD13
+	Gpio::E5, // PE5
+	Gpio::D8, // PD8
+	Gpio::B15, // PB15
+	Gpio::B14, // PB14
+	Gpio::B13, // PB13
+	Gpio::C8, // PC8
+	Gpio::C7, // PC7
+	Gpio::E8, // PE8
+	Gpio::D9, // PD9
+	Gpio::C9, // PC9
+	Gpio::B7, // PB7
+	Gpio::C12, // PC12 (SD MOSI)
+	Gpio::C11, // PC11 (SD MISO)
+	Gpio::C10, // PC10 (SD SCK)
+	Gpio::D2, // PD2 (SD CS)
+	Gpio::D1, // PD1 (CAN TX)
+	Gpio::D0, // PD0 (CAN RX)
+	Gpio::A9, // PA9 (UART TX)
+	Gpio::A10, // PA10 (UART RX)
+	Gpio::B10, // PB10 (UART TX)
+	Gpio::B11, // PB11 (UART RX)
+// "PE15",
+// "PE14",
+// "PD13",
+// "PE5",
+// "PD8",
+// "PB15",
+// "PB14",
+// "PB13",
+// "PC8",
+// "PC7",
+// "PE8",
+// "PD9",
+// "PC9",
+// "PB7",
+// "PC12 (SD MOSI)",
+// "PC11 (SD MISO)",
+// "PC10 (SD SCK)",
+// "PD2 (SD CS)",
+// "PD1 (CAN TX)",
+// "PD0 (CAN RX)",
+// "PA9 (UART TX)",
+// "PA10 (UART RX)",
+// "PB10 (UART TX)",
+// "PB11 (UART RX)",
 }

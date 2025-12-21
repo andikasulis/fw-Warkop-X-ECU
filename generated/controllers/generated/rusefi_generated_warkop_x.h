@@ -58,8 +58,8 @@
 #define adc_channel_e_EFI_ADC_ERROR 50
 #define adc_channel_e_EFI_ADC_NONE 0
 #define adc_channel_e_EFI_ADC_TOTAL_CHANNELS 49
-#define adc_channel_e_enum 0="NONE",9="AC Input (B0)",11="Analog Input 10 (C0)",12="Analog Input 11 (C1)",13="Analog Input 12 (C2)",14="Analog Input 13 (C3)",15="Analog Input 14 (C4)",16="Analog Input 15 (C5)",7="Analog Input 6 (A6)",8="Analog Input 7 (A7)",10="Analog Reserve 1 (B1)",3="Battery Voltage (A2)",5="CLT - Coolant Temperature (A4)",6="IAT - Intake Air Temperature (A5)",1="MAP Sensor (A0)",2="O2 / AFR Sensor (A1)",4="TPS - Throttle Position Sensor (A3)"
-#define adc_channel_e_fullenum "NONE","MAP Sensor (A0)","O2 / AFR Sensor (A1)","Battery Voltage (A2)","TPS - Throttle Position Sensor (A3)","CLT - Coolant Temperature (A4)","IAT - Intake Air Temperature (A5)","Analog Input 6 (A6)","Analog Input 7 (A7)","AC Input (B0)","Analog Reserve 1 (B1)","Analog Input 10 (C0)","Analog Input 11 (C1)","Analog Input 12 (C2)","Analog Input 13 (C3)","Analog Input 14 (C4)","Analog Input 15 (C5)"
+#define adc_channel_e_enum 0="NONE",1="PA0",2="PA1",3="PA2",4="PA3",5="PA4",6="PA5",7="PA6",8="PA7",9="PB0",10="PB1",11="PC0",12="PC1",13="PC2",14="PC3",15="PC4",16="PC5"
+#define adc_channel_e_fullenum "NONE","PA0","PA1","PA2","PA3","PA4","PA5","PA6","PA7","PB0","PB1","PC0","PC1","PC2","PC3","PC4","PC5"
 #define ADC_CHANNEL_NONE 0
 #define afr_sensor_s_size 20
 #define air_pressure_sensor_config_s_size 12
@@ -177,8 +177,8 @@
 #define boostType_e_auto_enum 0="OPEN_LOOP",1="CLOSED_LOOP"
 #define boostType_e_CLOSED_LOOP 1
 #define boostType_e_OPEN_LOOP 0
-#define brain_input_pin_e_enum 0="NONE",53="CKP - Crankshaft Position Sensor (D3)",54="CMP - Camshaft Position Sensor (D4)",57="VSS - Vehicle Speed Sensor (D7)"
-#define brain_input_pin_e_fullenum "NONE","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","CKP - Crankshaft Position Sensor (D3)","CMP - Camshaft Position Sensor (D4)","INVALID","INVALID","VSS - Vehicle Speed Sensor (D7)"
+#define brain_input_pin_e_enum 0="NONE",17="PA15 (Digital)",18="PB0 (Digital)",53="PD3",54="PD4",57="PD7",79="PE13"
+#define brain_input_pin_e_fullenum "NONE","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","PA15 (Digital)","PB0 (Digital)","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","PD3","PD4","INVALID","INVALID","PD7","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","PE13"
 #define brain_pin_diag_e_PIN_DRIVER_OFF 0x20
 #define brain_pin_diag_e_PIN_DRIVER_OVERTEMP 0x10
 #define brain_pin_diag_e_PIN_OK 0
@@ -1437,8 +1437,8 @@
 #define operation_mode_e_FOUR_STROKE_TWELVE_TIMES_CRANK_SENSOR 6
 #define operation_mode_e_OM_NONE 0
 #define operation_mode_e_TWO_STROKE 3
-#define output_pin_e_enum 0="NONE",41="AC Compressor Relay (C7)",50="CAN RX (D0)",51="CAN TX (D1)",25="Comms LED (B7)",17="Fan Relay (A15)",42="Fuel Pump Relay (C8)",59="Idle Control 1 (D9)",81="Ignition Output 1 (E15)",80="Ignition Output 2 (E14)",63="Ignition Output 3 (D13)",71="Ignition Output 4 (E5)",58="Injector 1 (D8)",33="Injector 2 (B15)",32="Injector 3 (B14)",31="Injector 4 (B13)",74="Main Relay (E8)",52="SD Card Chip Select (D2)",45="SPI3 MISO - SD Card (C11)",46="SPI3 MOSI - SD Card (C12)",44="SPI3 SCK - SD Card (C10)",43="Tacho Output (C9)",12="UART1 RX (A10)",11="UART1 TX (A9)",29="UART3 RX (B11)",28="UART3 TX (B10)"
-#define output_pin_e_fullenum "NONE","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","UART1 TX (A9)","UART1 RX (A10)","INVALID","INVALID","INVALID","INVALID","Fan Relay (A15)","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","Comms LED (B7)","INVALID","INVALID","UART3 TX (B10)","UART3 RX (B11)","INVALID","Injector 4 (B13)","Injector 3 (B14)","Injector 2 (B15)","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","AC Compressor Relay (C7)","Fuel Pump Relay (C8)","Tacho Output (C9)","SPI3 SCK - SD Card (C10)","SPI3 MISO - SD Card (C11)","SPI3 MOSI - SD Card (C12)","INVALID","INVALID","INVALID","CAN RX (D0)","CAN TX (D1)","SD Card Chip Select (D2)","INVALID","INVALID","INVALID","INVALID","INVALID","Injector 1 (D8)","Idle Control 1 (D9)","INVALID","INVALID","INVALID","Ignition Output 3 (D13)","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","Ignition Output 4 (E5)","INVALID","INVALID","Main Relay (E8)","INVALID","INVALID","INVALID","INVALID","INVALID","Ignition Output 2 (E14)","Ignition Output 1 (E15)"
+#define output_pin_e_enum 0="NONE",12="PA10 (UART RX)",11="PA9 (UART TX)",28="PB10 (UART TX)",29="PB11 (UART RX)",31="PB13",32="PB14",33="PB15",25="PB7",44="PC10 (SD SCK)",45="PC11 (SD MISO)",46="PC12 (SD MOSI)",41="PC7",42="PC8",43="PC9",50="PD0 (CAN RX)",51="PD1 (CAN TX)",63="PD13",52="PD2 (SD CS)",58="PD8",59="PD9",80="PE14",81="PE15",71="PE5",74="PE8"
+#define output_pin_e_fullenum "NONE","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","PA9 (UART TX)","PA10 (UART RX)","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","PB7","INVALID","INVALID","PB10 (UART TX)","PB11 (UART RX)","INVALID","PB13","PB14","PB15","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","PC7","PC8","PC9","PC10 (SD SCK)","PC11 (SD MISO)","PC12 (SD MOSI)","INVALID","INVALID","INVALID","PD0 (CAN RX)","PD1 (CAN TX)","PD2 (SD CS)","INVALID","INVALID","INVALID","INVALID","INVALID","PD8","PD9","INVALID","INVALID","INVALID","PD13","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","PE5","INVALID","INVALID","PE8","INVALID","INVALID","INVALID","INVALID","INVALID","PE14","PE15"
 #define PACK_ADD_TEMPERATURE 40
 #define PACK_MULT_AFR 1000
 #define PACK_MULT_AFR_CFG 10
@@ -1545,7 +1545,7 @@
 #define SentInput_NONE 0
 #define show_tcu_gauges false
 #define show_vvt_output_pin true
-#define SIGNATURE_HASH 288950833
+#define SIGNATURE_HASH 1258977499
 #define SIMULATOR_TUNE_BIN_FILE_NAME "generated/simulator_tune_image.bin"
 #define SIMULATOR_TUNE_BIN_FILE_NAME_PREFIX "generated/simulator_tune_image"
 #define SIMULATOR_TUNE_BIN_FILE_NAME_SUFFIX ".bin"
@@ -1579,8 +1579,8 @@
 #define stft_state_e_stftDisabledTpsAccel 8
 #define stft_state_e_stftDisabledTuning 2
 #define stft_state_e_stftEnabled 0
-#define switch_input_pin_e_enum 0="NONE",79="Clutch Input (E13)"
-#define switch_input_pin_e_fullenum "NONE","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","INVALID","Clutch Input (E13)"
+#define switch_input_pin_e_enum "NONE", "INVALID", "PA0", "PA1", "PA2", "PA3", "PA4", "PA5", "PA6", "PA7", "PA8", "PA9", "PA10", "PA11", "PA12", "PA13", "PA14", "PA15", "PB0", "PB1", "PB2", "PB3", "PB4", "PB5", "PB6", "PB7", "PB8", "PB9", "PB10", "PB11", "PB12", "PB13", "PB14", "PB15", "PC0", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", "PC8", "PC9", "PC10", "PC11", "PC12", "PC13", "PC14", "PC15", "PD0", "PD1", "PD2", "PD3", "PD4", "PD5", "PD6", "PD7", "PD8", "PD9", "PD10", "PD11", "PD12", "PD13", "PD14", "PD15", "PE0", "PE1", "PE2", "PE3", "PE4", "PE5", "PE6", "PE7", "PE8", "PE9", "PE10", "PE11", "PE12", "PE13", "PE14", "PE15", "PF0", "PF1", "PF2", "PF3", "PF4", "PF5", "PF6", "PF7", "PF8", "PF9", "PF10", "PF11", "PF12", "PF13", "PF14", "PF15", "PG0", "PG1", "PG2", "PG3", "PG4", "PG5", "PG6", "PG7", "PG8", "PG9", "PG10", "PG11", "PG12", "PG13", "PG14", "PG15", "PH0", "PH1", "PH2", "PH3", "PH4", "PH5", "PH6", "PH7", "PH8", "PH9", "PH10", "PH11", "PH12", "PH13", "PH14", "PH15", "PI0", "PI1", "PI2", "PI3", "PI4", "PI5", "PI6", "PI7", "PI8", "PI9", "PI10", "PI11", "PI12", "PI13", "PI14", "PI15", "PJ0", "PJ1", "PJ2", "PJ3", "PJ4", "PJ5", "PJ6", "PJ7", "PJ8", "PJ9", "PJ10", "PJ11", "PJ12", "PJ13", "PJ14", "PJ15", "PK0", "PK1", "PK2", "PK3", "PK4", "PK5", "PK6", "PK7", "PK8", "PK9", "PK10", "PK11", "PK12", "PK13", "PK14", "PK15"
+#define switch_input_pin_e_fullenum "NONE", "INVALID", "PA0", "PA1", "PA2", "PA3", "PA4", "PA5", "PA6", "PA7", "PA8", "PA9", "PA10", "PA11", "PA12", "PA13", "PA14", "PA15", "PB0", "PB1", "PB2", "PB3", "PB4", "PB5", "PB6", "PB7", "PB8", "PB9", "PB10", "PB11", "PB12", "PB13", "PB14", "PB15", "PC0", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", "PC8", "PC9", "PC10", "PC11", "PC12", "PC13", "PC14", "PC15", "PD0", "PD1", "PD2", "PD3", "PD4", "PD5", "PD6", "PD7", "PD8", "PD9", "PD10", "PD11", "PD12", "PD13", "PD14", "PD15", "PE0", "PE1", "PE2", "PE3", "PE4", "PE5", "PE6", "PE7", "PE8", "PE9", "PE10", "PE11", "PE12", "PE13", "PE14", "PE15", "PF0", "PF1", "PF2", "PF3", "PF4", "PF5", "PF6", "PF7", "PF8", "PF9", "PF10", "PF11", "PF12", "PF13", "PF14", "PF15", "PG0", "PG1", "PG2", "PG3", "PG4", "PG5", "PG6", "PG7", "PG8", "PG9", "PG10", "PG11", "PG12", "PG13", "PG14", "PG15", "PH0", "PH1", "PH2", "PH3", "PH4", "PH5", "PH6", "PH7", "PH8", "PH9", "PH10", "PH11", "PH12", "PH13", "PH14", "PH15", "PI0", "PI1", "PI2", "PI3", "PI4", "PI5", "PI6", "PI7", "PI8", "PI9", "PI10", "PI11", "PI12", "PI13", "PI14", "PI15", "PJ0", "PJ1", "PJ2", "PJ3", "PJ4", "PJ5", "PJ6", "PJ7", "PJ8", "PJ9", "PJ10", "PJ11", "PJ12", "PJ13", "PJ14", "PJ15", "PK0", "PK1", "PK2", "PK3", "PK4", "PK5", "PK6", "PK7", "PK8", "PK9", "PK10", "PK11", "PK12", "PK13", "PK14", "PK15"
 #define TABLE_2_LOAD_SIZE 8
 #define TABLE_2_RPM_SIZE 8
 #define TABLE_3_LOAD_SIZE 8
@@ -2136,7 +2136,7 @@
 #define ts_show_wastegate_sensor true
 #define ts_show_wbo_canbus_index true
 #define ts_show_wbo_canbus_set_index true
-#define TS_SIGNATURE "rusEFI main.2025.12.20.warkop_x.288950833"
+#define TS_SIGNATURE "rusEFI master.2025.12.21.warkop_x.1258977499"
 #define TS_SIMULATE_CAN '>'
 #define TS_SIMULATE_CAN_char >
 #define TS_TEST_COMMAND 't'
