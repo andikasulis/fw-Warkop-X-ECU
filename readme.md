@@ -7,7 +7,7 @@ Custom RusEfi firmware for **Yamaha Vixion OLD (3C1)** 200cc single cylinder mot
 **Firmware Version:** 0.1  
 **Binary Size:** 297 KB (29% flash usage)
 
-> **📌 STM32F407VET6 Variant (512 KB flash):** See [README_VET6.md](README_VET6.md) for VET6-specific build instructions. Current binary (297 KB) works on both variants!
+> **📌 STM32F407VET6 Variant (512 KB flash):** See [README_VET6.md](README_VET6.md) for VET6-specific build instructions. In this branch, the firmware is capped at **384 KB** to protect the settings sector!
 
 ---
 

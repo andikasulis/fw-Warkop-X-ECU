@@ -8,24 +8,24 @@ This branch is specifically configured for **STM32F407VET6** (512 KB flash) inst
 |-----------|-------------|---------------------|
 | Flash Size | 1024 KB | **512 KB** |
 | RAM | 192 KB | 192 KB (same) |
-| Binary Size | 297 KB | 297 KB (same) |
-| Flash Usage | 29% | **58%** |
-| Free Space | 727 KB (71%) | 215 KB (42%) |
+| Binary Size | 297 KB | **384 KB** |
+| Flash Usage | 29% | **75%** |
+| Free Space | 727 KB (71%) | **128 KB (25%)** |
 
 ## Build Instructions
 
 ### Method 1: Use Pre-built Binary (Recommended)
 
-The binary size (297 KB) is small enough to work on VET6 without modifications:
+The binary size (**384 KB**) is now the fixed limit for this branch to protect the settings sector:
 
 ```bash
-# Flash directly using the main branch binary
-st-flash write rusefi_warkop_x.bin 0x08000000
+# Flash the VET6-specific binary
+st-flash write rusefi_warkop_x_2025-12-21_13-19.bin 0x08000000
 ```
 
 **Why this works:**
-- Binary is 297 KB < 512 KB flash limit
-- Firmware doesn't attempt to write beyond 512 KB
+- Binary is **384 KB** < 512 KB flash limit
+- Firmware leaves Sector 7 (128 KB) untouched
 - Linker script size is metadata only
 
 ### Method 2: Custom Linker Script (Proper Way)
@@ -74,9 +74,9 @@ After flashing to VET6:
 
 ⚠️ **Important:**
 - VET6 has HALF the flash of VGT6 (512 KB vs 1024 KB)
-- Current binary (297 KB) fits comfortably with 42% margin
-- If adding features, monitor binary size carefully
-- Keep binary under 450 KB for safety
+- Current binary is **384 KB** (Fixed by Linker Script)
+- This reserves exactly **128 KB** (Sector 7) for settings
+- **DO NOT** increase binary size beyond 384 KB
 
 ## Reverting to VGT6
 
