@@ -6,6 +6,9 @@ BOARDINC += $(BOARD_DIR)/generated/controllers/generated
 # defines SHORT_BOARD_NAME
 include $(BOARD_DIR)/meta-info.env
 
+# Custom Re-branding
+DDEFS += -DCUSTOM_BRAND_NAME=\"WarkopEfi\"
+
 # ========== MEMORY OPTIMIZATION ==========
 # Disable wideband firmware update to save flash (~20-30KB)
 DDEFS += -DEFI_WIDEBAND_FIRMWARE_UPDATE=FALSE
