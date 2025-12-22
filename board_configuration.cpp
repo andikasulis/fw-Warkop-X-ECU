@@ -34,8 +34,8 @@ static void customBoardDefaultConfiguration() {
   engineConfiguration->map.sensor.hwChannel = EFI_ADC_NONE;
   engineConfiguration->afr.hwChannel = EFI_ADC_NONE;
   engineConfiguration->vbattAdcChannel = EFI_ADC_NONE;
-  engineConfiguration->tps1_1AdcChannel = EFI_ADC_NONE;
-  engineConfiguration->clt.adcChannel = EFI_ADC_NONE;
+  engineConfiguration->tps1_1AdcChannel = EFI_ADC_3; // TPS PA3
+  engineConfiguration->clt.adcChannel = EFI_ADC_4;   // CLT PA4 (ADC4)
   engineConfiguration->iat.adcChannel = EFI_ADC_NONE;
 
   // ========== ADDITIONAL ANALOG INPUTS ==========
