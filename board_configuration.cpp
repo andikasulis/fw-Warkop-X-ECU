@@ -79,11 +79,10 @@ static void customBoardDefaultConfiguration() {
   engineConfiguration->canRxPin = Gpio::Unassigned;
 }
 
-void customBoardTsAction(uint16_t subSystem, uint16_t index) {
-  // Custom TunerStudio command handler
-}
+void boardTuneDefaults();
 
 void setup_custom_board_overrides() {
   custom_board_DefaultConfiguration = customBoardDefaultConfiguration;
+  custom_board_ConfigOverrides = boardTuneDefaults;
   custom_board_ts_command = customBoardTsAction;
 }
