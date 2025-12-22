@@ -13,6 +13,11 @@ void boardTuneDefaults() {
   engineConfiguration->compressionRatio = 9.0f;
   engineConfiguration->fuelAlgorithm = engine_load_mode_e::LM_ALPHA_N;
 
+  // ========== SENSOR CALIBRATION ==========
+  // Set sensible defaults to avoid "too close together" error
+  engineConfiguration->tpsMin = 100;
+  engineConfiguration->tpsMax = 900;
+
   // ========== INJECTOR CONFIGURATION ==========
   engineConfiguration->injector.flow = 180.0f;
   engineConfiguration->injectionMode = injection_mode_e::IM_SEQUENTIAL;
