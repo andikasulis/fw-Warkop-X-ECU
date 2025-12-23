@@ -70,8 +70,8 @@ USE_OPT += -Os -fomit-frame-pointer -falign-functions=16
 USE_LTO = yes
 
 # Remove unused functions and data
-USE_OPT += -ffunction-sections -fdata-sections
-USE_LDOPT += -Wl,--gc-sections
+USE_OPT += -ffunction-sections -fdata-sections -Wl,--gc-sections
+
 
 
 # ========== OPTIONAL FEATURES ==========
