@@ -1,2 +1,9 @@
-! this file is used to define custom board-specific calibrations
-! see also extra.txt for board-specific data points
+# Warkop-X Board TPS Configuration Override
+# This file overrides the default voltage-based TPS configuration
+# to use ADC count instead, making the Calibrate TPS dialog work correctly
+
+# Override the default tps_limit_t definition to use ADC count instead of voltage
+# Original: custom tps_limit_t 2 scalar, S16, @OFFSET@, "V", 0.005, 0, 0, 5, 2
+#  New: ADC count based (0-1023 for 10-bit ADC)
+
+custom tps_limit_t 2 scalar, S16, @OFFSET@, "ADC", 1, 0, 0, 1023, 0
