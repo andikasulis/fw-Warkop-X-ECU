@@ -52,11 +52,13 @@ void boardTuneDefaults() {
   // ========== TUNING TABLES FROM MSQ ==========
 
   // 1. VE Table Axis Bins
-  static const float veRpmBins[16] = {650,  800,  1100, 1400, 1700, 2000,
-                                      2300, 2600, 2900, 3200, 3500, 3800,
-                                      4100, 4400, 4700, 7000};
+  // Optimized for Vixion: More resolution in 2000-8000 RPM (power band)
+  static const float veRpmBins[16] = {650,  1000, 1500,  2000, 2500, 3000,
+                                      3500, 4000, 4500,  5000, 6000, 7000,
+                                      8000, 9000, 10000, 12000};
   static const float veLoadBins[16] = {10, 20,  30,  40,  50,  60,  70,  80,
                                        90, 100, 110, 120, 130, 140, 150, 160};
+
   copyArray(config->veRpmBins, veRpmBins);
   copyArray(config->veLoadBins, veLoadBins);
 
@@ -97,11 +99,13 @@ void boardTuneDefaults() {
   copyTable(config->veTable, veTable);
 
   // 3. Ignition Table Axis Bins
-  static const float ignRpmBins[16] = {650,  800,  1100, 1400, 1700, 2000,
-                                       2300, 2600, 2900, 3200, 3500, 3800,
-                                       4100, 4400, 4700, 7000};
+  // Match VE table bins for consistency
+  static const float ignRpmBins[16] = {650,  1000, 1500,  2000, 2500, 3000,
+                                       3500, 4000, 4500,  5000, 6000, 7000,
+                                       8000, 9000, 10000, 12000};
   static const float ignLoadBins[16] = {21, 27, 33, 39, 48, 54,  60,  66,
                                         72, 81, 87, 93, 99, 108, 114, 120};
+
   copyArray(config->ignitionRpmBins, ignRpmBins);
   copyArray(config->ignitionLoadBins, ignLoadBins);
 
