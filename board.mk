@@ -63,8 +63,8 @@ DDEFS += -DEFI_CAN_SERIAL=FALSE -DEFI_CAN_GPIO=FALSE
 DDEFS += -DEFI_VERBOSE_CAN_TX=FALSE
 
 # ========== COMPILER OPTIMIZATIONS ==========
-# Use -Os (optimize for size) instead of -O2 (optimize for speed)
-USE_OPT = -Os -ggdb -fomit-frame-pointer -falign-functions=16
+# Append size optimization flags (use += to preserve existing flags)
+USE_OPT += -Os -fomit-frame-pointer -falign-functions=16
 
 # Enable Link-Time Optimization (LTO) for better code size
 USE_LTO = yes
@@ -72,6 +72,7 @@ USE_LTO = yes
 # Remove unused functions and data
 USE_OPT += -ffunction-sections -fdata-sections
 USE_LDOPT += -Wl,--gc-sections
+
 
 # ========== OPTIONAL FEATURES ==========
 # Uncomment to enable knock detection (requires knock sensor + adds ~15-20KB)
