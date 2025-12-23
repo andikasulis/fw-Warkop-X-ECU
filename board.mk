@@ -1,3 +1,11 @@
+# ========== COMPILER OPTIMIZATION FOR 512KB FLASH ==========
+# Size optimization (-Os) reduces code size by ~15-25%
+# Link Time Optimization (-flto) enables cross-module optimization, saves ~10-20%
+# Combined savings: ~40-70 KB flash
+DEBUG_LEVEL_OPT = -Os -flto -ggdb -g
+USE_LTO = yes
+USE_LINK_GC = yes
+
 include $(BOARD_DIR)/firmware/firmware.mk
 
 
