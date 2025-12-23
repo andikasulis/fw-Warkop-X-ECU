@@ -1,195 +1,270 @@
-# Quickshift Sensor Pin Options - Warkop X ECU
+# Quickshift Sensor Setup
 
-## 📌 Rekomendasi Pin untuk Quickshift Sensor
-
-Quickshift sensor adalah **switch digital** yang trigger saat shift lever digerakkan. Sensor ini perlu digital input dengan interrupt capability untuk response time yang cepat.
+Panduan pasang quickshift sensor di Warkop-X ECU.
 
 ---
 
-## 🎯 **Option 1: AC Input (RECOMMENDED)** ⭐⭐⭐⭐⭐
+## TL;DR
 
-**Pin:** `PB0` (EFI_ADC_8)  
-**Current Use:** AC Pressure Switch  
-**Type:** Analog input (bisa dipakai sebagai digital)
+**Recommended pin:** PB0 atau PB1 (analog reserve)
 
-### Kenapa Bagus:
-- ✅ AC input jarang dipakai di motor (lebih penting quickshift!)
-- ✅ Pin sudah di-configure dan ready
-- ✅ EXTI line 0 - fast interrupt response
-- ✅ Tidak bentrok dengan fitur critical
+Quick setup:
+1. Solder quickshift wire ke pin PB0
+2. Config di TunerStudio
+3. Set cut time (biasanya 50-100ms)
+4. Test & adjust
 
-### Cara Enable:
+---
+
+## Pin Options
+
+### Option 1: PB0 (AC Input) - RECOMMENDED
+
+**Currently:** AC pressure switch (gak kepake di motor)
+
+Kenapa bagus:
+- AC input jarang dipakai di motor
+- Fast interrupt (EXTI0)
+- Pin udah configured
+
+Config:
 ```cpp
 // di board_configuration.cpp
-// Ganti dari AC input jadi quickshift
-engineConfiguration->tcuInputSpeedSensorPin = Gpio::B0;  // Quickshift input
-// atau untuk shift torque reduction:
 engineConfiguration->torqueReductionTriggerPin = Gpio::B0;
 ```
 
----
+### Option 2: PB1 (Analog Reserve) - RECOMMENDED
 
-## 🎯 **Option 2: Analog Reserve 1** ⭐⭐⭐⭐⭐
+**Currently:** Gak dipakai sama sekali
 
-**Pin:** `PB1` (EFI_ADC_9)  
-**Current Use:** Analog Reserve (TIDAK DIPAKAI!)  
-**Type:** Analog input (bisa digital)
+Kenapa bagus:
+- Free pin, gak kepake
+- Fast interrupt (EXTI1)
+- Aman, gak bentrok
 
-### Kenapa Bagus:
-- ✅ Pin **TIDAK DIPAKAI** sama sekali sekarang
-- ✅ EXTI line 1 - fast interrupt
-- ✅ Paling aman - zero conflict!
-- ✅ Tetap ada 9 ADC channels lain untuk sensor analog
-
-### Cara Enable:
+Config:
 ```cpp
-// di board_configuration.cpp
-engineConfiguration->torqueReductionTriggerPin = Gpio::B1;  // Quickshift
-```
-
----
-
-## 🎯 **Option 3: Clutch Input (ALTERNATIVE)**
-
-**Pin:** `PE13`  
-**Current Use:** Clutch Switch  
-**Type:** Digital switch input
-
-### Kenapa Bisa:
-- ✅ Clutch switch bisa share dengan quickshift
-- ✅ Logic: Quickshift = clutch di-tekan + shift
-- ⚠️ Tapi kurang ideal - quickshift sensor di shifter, bukan di clutch lever
-
-### Cara Enable (Dual Purpose):
-```cpp
-// Pakai clutch input untuk detect shift ready state
-engineConfiguration->clutchDownPin = Gpio::E13;
-engineConfiguration->torqueReductionTriggerPin = Gpio::E13;  // Share
-```
-
----
-
-## 🎯 **Option 4: Tambah Pin Baru (BEST - kalau ada spare pin)**
-
-Jika hardware ECU Anda punya spare pin yang belum di-map:
-
-### Pin Digital GPIO yang Available:
-- `PE0`, `PE1`, `PE2`, `PE3`, `PE4` (jika tidak dipakai untuk lain)
-- `PD5`, `PD6` (jika tidak dipakai)
-- `PC6` (jika tidak dipakai)
-
-### Cara Enable:
-```cpp
-// Pilih salah satu pin spare
-engineConfiguration->torqueReductionTriggerPin = Gpio::E0;  // Contoh
-```
-
----
-
-## 🔌 **Wiring Quickshift Sensor**
-
-### Sensor Type: Normally Open (NO) Switch
-
-```
-Quickshift Sensor Wiring:
-┌─────────────┐
-│  Sensor     │
-│  (NO Type)  │
-│             │
-│  Pin 1 ─────┼──── +5V (dari ECU)
-│  Pin 2 ─────┼──── Signal pin (PB0 atau PB1)
-│  Ground ────┼──── GND (dari ECU)
-└─────────────┘
-
-Internal pull-down di ECU:
-Signal pin ──[10kΩ]── GND
-
-Logic:
-- Shift lever TIDAK di-tekan: 0V (LOW)
-- Shift lever DI-TEKAN: 5V (HIGH) → Trigger ignition cut!
-```
-
----
-
-## ⚙️ **Configuration di TunerStudio**
-
-Setelah pin dikonfigurasi, set di TunerStudio:
-
-1. **Enable Shift Torque Reduction:**
-   - Go to: `Shift Torque Reduction` menu
-   - Enable: `Use Shift Torque Reduction`
-
-2. **Set Pin:**
-   - `Shift Input Pin`: Pilih pin yang Anda pakai (B0/B1)
-
-3. **Timing Parameters:**
-   - `Cut Duration`: 50-100 ms (coba mulai dari 80ms)
-   - `Cut Type`: `Ignition Cut` atau `Fuel Cut` atau `Both`
-   - `RPM Threshold`: 3000 RPM (aktif di atas RPM ini)
-   - `TPS Threshold`: 50% (aktif saat gas buka >50%)
-
-4. **Safety:**
-   - `Max Cut RPM`: 11000 RPM (jangan cut di rev limit)
-
----
-
-## 🏍️ **Hardware: Quickshift Sensor Options**
-
-### Commercial Sensors:
-- **Translogic QS-Pro**: $150-200 (plug & play)
-- **Cordona Quickshifter**: $100-150
-- **Generic Motorcycle QS**: $30-80 (eBay/AliExpress)
-
-### DIY Option:
-- **Micro Switch**: $5-10
-- Mount di shift linkage
-- Adjust gap: 1-2mm travel trigger
-
----
-
-## 📋 **Implementation Checklist**
-
-### Software:
-- [ ] Choose pin (recommend: PB1 - Analog Reserve)
-- [ ] Update `board_configuration.cpp`
-- [ ] Update `connectors/custom_firmware.yaml`
-- [ ] Recompile firmware
-- [ ] Flash ke ECU
-
-### Hardware:
-- [ ] Beli quickshift sensor
-- [ ] Pasang di shift linkage
-- [ ] Wire ke ECU pin yang dipilih
-- [ ] Wire 5V & GND
-
-### Tuning:
-- [ ] Set cut duration (start 80ms)
-- [ ] Test shift di berbagai RPM
-- [ ] Fine-tune timing untuk smoothness
-- [ ] Verify no false triggers
-
----
-
-## 🎯 **Rekomendasi Final**
-
-**PAKAI PIN: `PB1` (EFI_ADC_9 - Analog Reserve 1)** ✅
-
-**Alasan:**
-1. Pin TIDAK DIPAKAI sekarang
-2. Zero conflict dengan fitur lain
-3. Fast interrupt (EXTI1)
-4. Mudah wire (ADC header di board)
-5. Masih ada 9 ADC channels lain
-
-**Config yang perlu ditambahkan:**
-```cpp
-// di board_configuration.cpp, fungsi boardTuneDefaults()
 engineConfiguration->torqueReductionTriggerPin = Gpio::B1;
-engineConfiguration->torqueReductionEnabled = true;
-engineConfiguration->torqueReductionTime = 80;  // ms
-engineConfiguration->torqueReductionIgnitionCut = 6;  // cylinders to cut
+```
+
+### Option 3: PC4 (Clutch) - Alternatif
+
+**Currently:** Clutch switch
+
+Trade-off:
+- Clutch switch ilang
+- Bisa dipake kalo gak pake clutch safety
+
+Config:
+```cpp
+engineConfiguration->torqueReductionTriggerPin = Gpio::C4;
 ```
 
 ---
 
-**Mau saya configure sekarang untuk pin PB1?** 🚀
+## Hardware Connection
+
+### Quickshift Sensor Types
+
+**1. Mechanical Switch (Normally Open)**
+```
+Sensor           ECU
+──────           ───
+Terminal 1 ─────► PB0 (signal)
+Terminal 2 ─────► GND
+```
+
+**2. Mechanical Switch (Normally Closed)**
+```
+Sensor           ECU
+──────           ───
+Terminal 1 ─────► PB0 (signal)
+Terminal 2 ─────► +5V (atau +12V via resistor)
+```
+
+Kalo sensor NC, lu perlu pull-up resistor ~10kΩ.
+
+### With Pull-Up Resistor
+
+```
++5V
+ │
+ ├───[ 10kΩ ]───┬──► to PB0
+ │              │
+               QS Switch
+                │
+               GND
+```
+
+---
+
+## Software Configuration
+
+### TunerStudio Settings
+
+1. **Enable Launch/Flat Shift**
+   - Settings → Launch Control
+   - Enable "Flat shift / no-lift upshift" 
+
+2. **Pin Configuration**
+   - Advanced → I/O Pins
+   - "Torque reduction trigger pin" → set ke PB0 atau PB1
+
+3. **Cut Settings**
+   - "Flat shift duration" → 50-100ms (start dari 80ms)
+   - "Launch activation mode" → Switch
+   - "Launch switch polarity" → sesuaiin sama sensor (NO = Low, NC = High)
+
+4. **Ignition Cut or Fuel Cut**
+   - "Flat shift mode" → Ignition cut (lebih smooth)
+   - Atau pake fuel cut (lebih agresif)
+
+5. **Burn to ECU**
+
+---
+
+## Testing
+
+### Bench Test
+
+1. Gak pasang shift sensor dulu
+2. Connect pin quickshift ke GND (simulate shift)
+3. Monitor di TunerStudio:
+   - Output Channels → "Launch/flat shift active"
+   - Should trigger saat grounded
+
+### On-Bike Test
+
+1. Idle, neutral
+2. Tekan shift lever (trigger sensor)
+3. Check TunerStudio - active?
+4. Kalo oke, test ride
+
+### Test Ride
+
+1. Start konservatif: 80ms cut time
+2. Test shift di ~5000 RPM
+3. Kalo masih kasar → tambahin cut time
+4. Kalo gigi susah masuk → kurangin cut time
+5. Sweet spot biasanya 60-100ms
+
+---
+
+## Tuning Cut Time
+
+| Feel | Cut Time | Action |
+|------|----------|--------|
+| Gigi susah masuk, grind | 50-60ms | Tambahin 10ms |
+| Shift smooth tapi lama | 100ms+ | Kurangin 10ms |
+| Perfect, smooth, quick | 70-90ms | Keep it! |
+
+Tiap motor beda, adjust sesuai feel lu.
+
+---
+
+## Troubleshooting
+
+### Quickshift Gak Trigger
+
+1. Check wiring - sensor ke pin correct?
+2. Check polarity - NO vs NC
+3. Check pin config di TS
+4. Test continuity sensor saat shift
+
+### Cut Terlalu Lama / Pendek
+
+1. Adjust "Flat shift duration" di TS
+2. Start dari 80ms
+3. Increment 10ms sampe comfortable
+
+### Engine Mati Saat Shift
+
+1. Cut time terlalu lama - kurangin
+2. Mixture terlalu lean - check AFR
+3. Ignition cut terlalu agresif - coba fuel cut
+
+### Shift Masih Kasar
+
+1. Cut time kurang - tambahin
+2. Clutchless shift technique - practice!
+3. Gearbox issue - bukan masalah ECU
+
+---
+
+## Advanced: Adjustable Cut Time
+
+Kalo mau cut time beda per RPM range:
+
+Edit `controllers/actuators/torque_reduction.cpp`:
+
+```cpp
+// Example: Progressive cut time
+
+float getCutTime(int rpm) {
+    if (rpm < 5000) {
+        return 60;  // Short cut low RPM
+    } else if (rpm < 8000) {
+        return 80;  // Medium cut mid RPM
+    } else {
+        return 100; // Long cut high RPM
+    }
+}
+```
+
+Build ulang firmware. Advanced users only!
+
+---
+
+## Wiring Diagram
+
+```
+Quickshift Sensor (NO)
+        │
+        ├───────► PB0 (ECU)
+        │
+       GND
+
+
+With Pull-Up (NC):
+
++5V
+ │
+10kΩ
+ │
+ ├───────► PB0
+ │
+Sensor
+ │
+GND
+```
+
+---
+
+## Recommended Parts
+
+- Quickshift sensor: Any motorcycle quickshift (NO type recommended)
+- Wire: 22 AWG, shielded kalo bisa
+- Resistor (kalo NC): 10kΩ, 1/4W
+- Connector: JST atau Deutsch
+
+---
+
+## Tips
+
+1. Route wire away dari high-voltage ignition
+2. Use shielded cable kalo possible
+3. Start konservatif (80ms), adjust slowly
+4. Practice clutchless shift technique
+5. Gearbox harus sehat (gak aus)
+
+---
+
+## Safety
+
+- Quickshift gak replace clutch! Masih perlu clutch buat starting/stopping
+- Jangan quickshift saat cornering hard atau full lean
+- Practice di jalan sepi dulu
+
+---
+
+Itu aja. Have fun quickshifting! 🏍️💨

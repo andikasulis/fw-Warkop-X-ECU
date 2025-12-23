@@ -1,107 +1,223 @@
-# Warkop-X ECU - CAN Bus Pin Configuration
+# CAN Bus Setup - Warkop-X ECU
 
-## CAN Bus Pins (CAN1)
+Pin configuration dan wiring buat CAN bus ke dashboard.
 
-| Signal | Pin | Alternative Pin | Function |
-|--------|-----|-----------------|----------|
-| CAN_RX | PA11 | PD0 | CAN Receive |
-| CAN_TX | PA12 | PD1 | CAN Transmit |
+---
 
-## Hardware Connection
+## Pin CAN Bus (CAN1)
 
-### CAN Transceiver (e.g., TJA1050, MCP2551)
+| Signal | Pin | Pin Alternatif |
+|--------|-----|----------------|
+| CAN_RX | PA11 | PD0 |
+| CAN_TX | PA12 | PD1 |
+
+Default pake PA11/PA12.
+
+---
+
+## Wiring Hardware
+
+### CAN Transceiver (TJA1050 / MCP2551)
 
 ```
-STM32F407VET6          CAN Transceiver          CAN Bus
-─────────────          ───────────────          ───────
-PA12 (TX)     ───────► CANH (Pin 6)     ───────► CAN_H
-PA11 (RX)     ◄─────── CANL (Pin 7)     ◄─────── CAN_L
-GND           ───────► GND (Pin 2)
-3.3V or 5V    ───────► VCC (Pin 3)
+STM32              Transceiver         Dashboard
+─────              ──────────          ─────────
+PA12 (TX)  ──────► Pin 6 (CANH) ─────► CAN_H
+PA11 (RX)  ◄────── Pin 7 (CANL) ◄───── CAN_L
+GND        ──────► Pin 2 (GND)
+3.3V/5V    ──────► Pin 3 (VCC)
 ```
 
 ### Termination Resistor
 
-- **120Ω resistor** between CAN_H and CAN_L at **both ends** of the CAN bus
-- If your ECU is at the end of the bus, add termination resistor on the board
+- **120Ω** antara CAN_H dan CAN_L
+- Pasang di **kedua ujung** CAN bus
+- Kalo ECU di ujung bus, pasang resistor di board
 
-## CAN Bus Settings
+---
 
-### Default Configuration
-- **Baud Rate**: 500 kbps (configurable in TunerStudio)
-- **Protocol**: rusEFI native CAN protocol
-- **Base CAN ID**: 0x200
-- **Broadcast Rate**: 50 Hz (20ms interval)
+## Settings CAN
 
-### Broadcasted Data (Default)
-- Engine RPM
-- Throttle Position (TPS)
-- Coolant Temperature (CLT)
-- Intake Air Temperature (IAT)
-- MAP (Manifold Absolute Pressure)
-- Battery Voltage
-- Engine Load
-- Ignition Timing
+### Config Default
 
-## TunerStudio Configuration
+- **Baud rate:** 500 kbps
+- **Protocol:** rusEFI native
+- **Base ID:** 0x200
+- **Rate:** 50 Hz (kirim tiap 20ms)
 
-### Enable CAN Broadcast
-1. Open TunerStudio
-2. Go to **Controllers → CAN Bus**
-3. Enable **"CAN Write"**
-4. Set **Baud Rate** to **500 kbps** (or 1000 kbps if dashboard supports)
-5. Select **CAN protocol** (typically "rusEFI" or "Generic Dash")
-6. Click **Burn** to save
+### Data yang Dikirim
 
-### CAN Dashboard Protocols Supported
-- **rusEFI native** (default)
-- **MS/MegaSquirt CAN** (via canNbcType setting)
-- **AiM** 
-- **Haltech**
-- **Generic OBD-II CAN**
+Default broadcast:
+- RPM engine
+- TPS (throttle position)
+- CLT (coolant temp)
+- IAT (intake temp)
+- Vehicle speed
+- AFR (kalo ada sensor)
 
-### Advanced: Change CAN Base Address
-If needed, change base CAN ID in TunerStudio:
-- Navigate to **Controllers → CAN Bus → Base Address**
-- Default: `0x200` (512 decimal)
-- Range: `0x000` - `0x7FF` (standard 11-bit CAN ID)
+### CAN Addresses
+
+| Data | CAN ID | Bytes | Format |
+|------|--------|-------|--------|
+| RPM | 0x200 | 0-1 | uint16 |
+| TPS | 0x200 | 2-3 | uint16 |
+| CLT | 0x201 | 0-1 | int16 |
+| IAT | 0x201 | 2-3 | int16 |
+| Speed | 0x202 | 0-1 | uint16 |
+| AFR | 0x202 | 2-3 | uint16 |
+
+---
+
+## TunerStudio Config
+
+### Enable CAN Bus
+
+1. Buka TunerStudio
+2. Settings → CAN Bus
+3. Check "Enable CAN"
+4. Set baud rate: **500 kbps**
+5. Burn to ECU
+
+### Custom CAN Messages
+
+Kalo mau kirim data custom:
+
+1. Advanced → Custom CAN
+2. Add message
+3. Set ID, data, rate
+4. Burn
+
+---
+
+## Dashboard Wiring
+
+### Typical Dashboard Connection
+
+```
+Dashboard           ECU
+─────────           ───
+CAN_H      ◄──────► PA12 (via transceiver)
+CAN_L      ◄──────► PA11 (via transceiver)
+GND        ◄──────► GND
++12V       ◄──────► VBatt (untuk power dashboard)
+```
+
+### Tips
+
+- Twist CAN_H dan CAN_L cables buat reduce noise
+- Jangan panjang-panjang kabel (max 5m kalo gak pake shield)
+- Kalo interference banyak, pake shielded cable
+
+---
 
 ## Troubleshooting
 
-### Dashboard Not Receiving Data
-1. **Check wiring**: Verify CAN_H and CAN_L are not swapped
-2. **Check baud rate**: ECU and dashboard must match (500k or 1M)
-3. **Check termination**: 120Ω resistors at both ends
-4. **Check CAN enable**: Verify `canReadEnabled` and `canWriteEnabled` in code
-5. **Check protocol**: Dashboard protocol must match ECU broadcast protocol
+### Dashboard Gak Nyala
 
-### CAN Bus Errors
-- **Bus off**: Too many errors, check wiring and termination
-- **No ACK**: No other device on bus, or wrong baud rate
-- **Stuff error**: Electrical noise, add better grounding or shielding
+1. Check power dashboard (12V)
+2. Check ground
+3. Check baud rate match (500 kbps)
+4. Check termination resistor
 
-## Wiring Recommendations
+### Data Gak Muncul / Gak Update
 
-1. **Use twisted pair cable** for CAN_H and CAN_L (reduces noise)
-2. **Keep CAN wires short** and away from high-current wires
-3. **Use proper grounding** - single point ground for CAN transceiver
-4. **Shield the cable** if running near ignition coils or injectors
-5. **Maximum bus length**: 40m at 1Mbps, 100m at 500kbps
+1. Check CAN_H/CAN_L wiring (jangan kebalik!)
+2. Check termination resistor (120Ω)
+3. Monitor CAN di TunerStudio → CAN Monitor
+4. Check CAN ID match dengan dashboard
 
-## Alternative Pins (if PA11/PA12 conflict with USB)
+### Data Aneh / Corrupt
 
-If PA11/PA12 are used for USB, use alternative CAN1 pins:
+1. Noise - pake shielded cable
+2. Baud rate salah - set 500 kbps
+3. Termination gak ada - pasang 120Ω
+4. Cable terlalu panjang - keep under 5m
+
+---
+
+## Testing
+
+### Via TunerStudio
+
+1. Tools → CAN Bus Monitor
+2. Liat messages yang keluar
+3. Check ID dan data values
+
+### Via Multimeter
+
+1. Check voltage:
+   - CAN_H: ~3.5V (idle)
+   - CAN_L: ~1.5V (idle)
+   - Differential: ~2V
+
+2. Check resistance:
+   - CAN_H to CAN_L: ~60Ω (dengan termination 120Ω di 2 ujung)
+
+---
+
+## Advanced: Custom CAN Protocol
+
+Kalo dashboard butuh protocol khusus (kayak J1939, OBD2, dll):
+
+Edit `controllers/can/can_dash.cpp`:
 
 ```cpp
-// In board_configuration.cpp
-engineConfiguration->canTxPin = Gpio::D1;  // CAN1_TX (alternative)
-engineConfiguration->canRxPin = Gpio::D0;  // CAN1_RX (alternative)
+// Example: Custom CAN message
+void sendCustomCAN() {
+    CANTxFrame frame;
+    frame.IDE = CAN_IDE_STD;    // Standard ID
+    frame.SID = 0x300;          // Custom ID
+    frame.DLC = 8;              // 8 bytes
+    
+    // Pack data
+    frame.data8[0] = (rpm >> 8) & 0xFF;
+    frame.data8[1] = rpm & 0xFF;
+    frame.data8[2] = tps;
+    // ... dll
+    
+    canTransmit(&CAND1, CAN_ANY_MAILBOX, &frame, TIME_IMMEDIATE);
+}
 ```
 
-## Notes
+Build ulang firmware.
 
-- STM32F407 has **2 CAN peripherals** (CAN1 and CAN2)
-- Currently using **CAN1** (more compatible)
-- CAN2 requires CAN1 to be enabled (shared clock)
-- Maximum CAN bus speed: 1 Mbps
-- Minimum: 25 kbps (not recommended for real-time data)
+---
+
+## Wiring Diagram
+
+```
+        ECU (STM32F407VET6)
+        ┌─────────────────┐
+    3.3V│                 │
+     GND│    CAN1         │
+    PA11│  (RX/TX)        │
+    PA12│                 │
+        └────┬────────────┘
+             │
+         ┌───▼──────┐
+         │TJA1050   │ CAN Transceiver
+         │          │
+         │ H  ──────┼─────► CAN_H ───► Dashboard
+         │ L  ──────┼─────► CAN_L ───► Dashboard
+         │          │
+         └──────────┘
+              │
+            120Ω (termination)
+```
+
+---
+
+## Reference
+
+- rusEFI CAN wiki: https://github.com/rusefi/rusefi/wiki/CAN-Bus
+- TJA1050 datasheet
+- MCP2551 datasheet
+
+File terkait:
+- `board_configuration.cpp` - CAN pin config
+- `controllers/can/can_dash.cpp` - CAN messages
+- `board.mk` - CAN feature flags
+
+---
+
+Itu aja. Kalo masih error, tanya di forum atau check wiki.
