@@ -75,8 +75,13 @@ static void customBoardDefaultConfiguration() {
   engineConfiguration->sdCardCsPin = Gpio::Unassigned;
 
   // ========== CAN BUS CONFIGURATION ==========
-  engineConfiguration->canTxPin = Gpio::Unassigned;
-  engineConfiguration->canRxPin = Gpio::Unassigned;
+  // CAN1 on PB8 (RX) and PB9 (TX) - Standard STM32F407 CAN1 pins
+  engineConfiguration->canTxPin = Gpio::B9; // CAN1_TX
+  engineConfiguration->canRxPin = Gpio::B8; // CAN1_RX
+
+  // Alternative pins if PB8/PB9 not available:
+  // PA11 (CAN1_RX) and PA12 (CAN1_TX)
+  // PD0 (CAN1_RX) and PD1 (CAN1_TX)
 }
 
 void boardTuneDefaults();
