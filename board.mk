@@ -53,7 +53,25 @@ DDEFS += -DEFI_TOOTH_LOGGER=FALSE -DEFI_TEXT_LOGGING=FALSE
 DDEFS += -DEFI_WS2812=FALSE -DEFI_DAC=FALSE -DEFI_WIFI=FALSE -DEFI_ETHERNET=FALSE
 DDEFS += -DEFI_BOSCH_YAW=FALSE -DEFI_SENT_CHANNELS_NUM=0
 DDEFS += -DTRIGGER_EXTREME_LOGGING=FALSE
-DDEFS += -DEFI_CAN_SUPPORT=FALSE -DEFI_CAN_SERIAL=FALSE -DEFI_CAN_GPIO=FALSE
+
+# ========== CAN BUS CONFIGURATION ==========
+# Enable CAN bus for dashboard (adds ~15-20KB but critical for functionality)
+DDEFS += -DEFI_CAN_SUPPORT=TRUE
+# Keep CAN_SERIAL and CAN_GPIO disabled (not needed for basic dashboard)
+DDEFS += -DEFI_CAN_SERIAL=FALSE -DEFI_CAN_GPIO=FALSE
+# Disable verbose CAN TX to save RAM/Flash
+DDEFS += -DEFI_VERBOSE_CAN_TX=FALSE
+
+# ========== COMPILER OPTIMIZATIONS ==========
+# Use -Os (optimize for size) instead of -O2 (optimize for speed)
+USE_OPT = -Os -ggdb -fomit-frame-pointer -falign-functions=16
+
+# Enable Link-Time Optimization (LTO) for better code size
+USE_LTO = yes
+
+# Remove unused functions and data
+USE_OPT += -ffunction-sections -fdata-sections
+USE_LDOPT += -Wl,--gc-sections
 
 # ========== OPTIONAL FEATURES ==========
 # Uncomment to enable knock detection (requires knock sensor + adds ~15-20KB)

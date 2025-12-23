@@ -75,8 +75,14 @@ static void customBoardDefaultConfiguration() {
   engineConfiguration->sdCardCsPin = Gpio::Unassigned;
 
   // ========== CAN BUS CONFIGURATION ==========
-  engineConfiguration->canTxPin = Gpio::Unassigned;
-  engineConfiguration->canRxPin = Gpio::Unassigned;
+  // STM32F407 CAN1: Default pins PA11 (RX) and PA12 (TX)
+  // Alternative: PD0 (RX) and PD1 (TX) if PA11/PA12 are used for USB
+  engineConfiguration->canTxPin = Gpio::A12; // CAN1_TX
+  engineConfiguration->canRxPin = Gpio::A11; // CAN1_RX
+
+  // Enable CAN read/write for dashboard communication
+  engineConfiguration->canReadEnabled = true;
+  engineConfiguration->canWriteEnabled = true;
 }
 
 void customBoardTsAction(uint16_t subSystem, uint16_t index) {
