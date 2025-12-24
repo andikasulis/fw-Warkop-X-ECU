@@ -91,6 +91,86 @@ jobs:
           fi
         shell: bash
 
+      # Auto-patch TunerStudio .ini with custom Idle Rumble menu
+      - name: Patch .ini with Custom Idle Rumble Menu
+        run: |
+          TIMESTAMP="${{steps.set-variables.outputs.build_timestamp}}"
+          INI_FILE="rusefi_warkop_x_${TIMESTAMP}.ini"
+          
+          if [ ! -f "$INI_FILE" ]; then
+            echo "⚠️ INI file not found, skipping patch"
+            exit 0
+          fi
+          
+          echo "🔧 Patching $INI_FILE with idle rumble custom menu..."
+          
+          # Check if already patched
+          if grep -q "idleRumbleDialog" "$INI_FILE"; then
+            echo "✓ Already patched!"
+            exit 0
+          fi
+          
+          # Create backup
+          cp "$INI_FILE" "${INI_FILE}.backup"
+          
+          # Add dialog definition to [Dialogs] section
+          awk '
+          BEGIN { patched=0 }
+          /^\[Dialogs\]/ { dialogs_section=1; print; next }
+          dialogs_section && /^\[/ && !patched { 
+            print ""
+            print "   ; ═══════════════════════════════════════════════════════════"
+            print "   ; Idle Rumble Custom Dialog - Auto-patched by GitHub Actions"
+            print "   ; ═══════════════════════════════════════════════════════════"
+            print "   dialog = idleRumbleDialog, \"⚡ Idle Rumble - Drumbal Effect\""
+            print "      panel = idleRumblePanel"
+            print "      "
+            print "   panel = idleRumblePanel"
+            print "      field = \"#Idle Rumble creates aggressive idle sound\""
+            print "      field = \"#Works with cable throttle (no idle valve)\""
+            print "      field = \"\""
+            print "      field = \"Enable Idle Rumble\", idleRumbleEnabled"
+            print "      field = \"\""
+            print "      field = \"─────────── Basic Settings ───────────\""
+            print "      field = \"Rumble Amplitude (%)\", idleRumbleAmplitude, {idleRumbleEnabled == 1}"
+            print "      field = \"Rumble Speed/Period\", idleRumblePeriod, {idleRumbleEnabled == 1}"
+            print "      field = \"\""
+            print "      field = \"─────────── Method ───────────\""
+            print "      field = \"Method\", idleRumbleMethod, {idleRumbleEnabled == 1}"
+            print "      field = \"  0=Timing 1=Fuel 2=Spark 3=Combined\""
+            print "      field = \"\""
+            print "      field = \"─────────── Advanced ───────────\""
+            print "      field = \"Max Timing Offset (deg)\", idleRumbleTiming, {idleRumbleEnabled == 1 && (idleRumbleMethod == 0 || idleRumbleMethod == 3)}"
+            print "      field = \"Max Fuel Adjustment (%)\", idleRumbleFuel, {idleRumbleEnabled == 1 && (idleRumbleMethod == 1 || idleRumbleMethod == 3)}"
+            print "      field = \"\""
+            print "      field = \"─────────── Limits ───────────\""
+            print "      field = \"Max Active RPM\", idleRumbleMaxRpm, {idleRumbleEnabled == 1}"
+            print "      field = \"Max Active TPS (%)\", idleRumbleMaxTps, {idleRumbleEnabled == 1}"
+            print ""
+            patched=1
+            dialogs_section=0
+          }
+          { print }
+          ' "$INI_FILE" > "${INI_FILE}.tmp"
+          mv "${INI_FILE}.tmp" "$INI_FILE"
+          
+          # Add menu item to [Menu] section
+          awk '
+          BEGIN { menu_added=0 }
+          /menuDialog = main/ { in_menu=1; print; next }
+          in_menu && /^   / && !menu_added {
+            print "      ; Custom Idle Rumble Menu (auto-patched)"
+            print "      subMenu = idleRumbleDialog, \"⚡ Idle Rumble\""
+            menu_added=1
+          }
+          { print }
+          ' "$INI_FILE" > "${INI_FILE}.tmp"
+          mv "${INI_FILE}.tmp" "$INI_FILE"
+          
+          echo "✅ Patch applied successfully!"
+          echo "📝 .ini file now includes custom '⚡ Idle Rumble' menu"
+        shell: bash
+
       # Upload Individual Artifacts with Very Clear Names
       - name: Upload BINARY (.bin)
         uses: actions/upload-artifact@v4
