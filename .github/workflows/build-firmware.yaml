@@ -57,25 +57,23 @@ jobs:
           cp ext/rusefi/firmware/build/rusefi.bin firmware-artifacts/rusefi_warkop_x_${BUILD_TIMESTAMP}.bin
           
           # Create README for easier identification
-          cat > firmware-artifacts/README.txt << 'EOF'
-Warkop-X ECU Firmware Build
-===========================
-Board: Warkop-X (STM32F407VET6 - 512KB Flash)
-Build Date: ${BUILD_TIMESTAMP}
-Commit: ${GITHUB_SHA:0:8}
-Branch: ${GITHUB_REF_NAME}
-
-Files:
-------
-- rusefi_warkop_x_${BUILD_TIMESTAMP}.bin   : Main firmware binary (Flash to ECU)
-- rusefi_warkop_x_${BUILD_TIMESTAMP}.ini   : TunerStudio configuration
-
-How to use:
------------
-1. Flash the .bin file to your Warkop-X ECU
-2. Load the .ini file in TunerStudio
-3. Connect and tune!
-EOF
+          echo "Warkop-X ECU Firmware Build" > firmware-artifacts/README.txt
+          echo "===========================" >> firmware-artifacts/README.txt
+          echo "Board: Warkop-X (STM32F407VET6 - 512KB Flash)" >> firmware-artifacts/README.txt
+          echo "Build Date: ${BUILD_TIMESTAMP}" >> firmware-artifacts/README.txt
+          echo "Commit: ${GITHUB_SHA:0:8}" >> firmware-artifacts/README.txt
+          echo "Branch: ${GITHUB_REF_NAME}" >> firmware-artifacts/README.txt
+          echo "" >> firmware-artifacts/README.txt
+          echo "Files:" >> firmware-artifacts/README.txt
+          echo "------" >> firmware-artifacts/README.txt
+          echo "- rusefi_warkop_x_${BUILD_TIMESTAMP}.bin : Main firmware binary" >> firmware-artifacts/README.txt
+          echo "- rusefi_warkop_x_${BUILD_TIMESTAMP}.ini : TunerStudio config" >> firmware-artifacts/README.txt
+          echo "" >> firmware-artifacts/README.txt
+          echo "How to use:" >> firmware-artifacts/README.txt
+          echo "-----------" >> firmware-artifacts/README.txt
+          echo "1. Flash the .bin file to your Warkop-X ECU" >> firmware-artifacts/README.txt
+          echo "2. Load the .ini file in TunerStudio" >> firmware-artifacts/README.txt
+          echo "3. Connect and tune!" >> firmware-artifacts/README.txt
           
           echo "Artifacts prepared successfully"
           ls -lh firmware-artifacts/
