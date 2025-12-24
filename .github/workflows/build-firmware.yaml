@@ -99,20 +99,20 @@ jobs:
             print "      field = \"Enable Idle Rumble\", idleRumbleEnabled";
             print "      field = \"\"";
             print "      field = \"===== Basic Settings =====\"";
-            print "      field = \"Rumble Amplitude (%)\", idleRumbleAmplitude, {idleRumbleEnabled == 1}";
-            print "      field = \"Rumble Speed/Period\", idleRumblePeriod, {idleRumbleEnabled == 1}";
+            print "      field = \"Rumble Amplitude (%)\", idleRumbleAmplitude";
+            print "      field = \"Rumble Speed/Period\", idleRumblePeriod";
             print "      field = \"\"";
             print "      field = \"===== Method =====\"";
             print "      field = \"#0=Timing, 1=Fuel, 2=Spark, 3=Combined\"";
-            print "      field = \"Method\", idleRumbleMethod, {idleRumbleEnabled == 1}";
+            print "      field = \"Method\", idleRumbleMethod";
             print "      field = \"\"";
             print "      field = \"===== Advanced =====\"";
-            print "      field = \"Max Timing Offset (deg)\", idleRumbleTiming, {idleRumbleEnabled == 1 && (idleRumbleMethod == 0 || idleRumbleMethod == 3)}";
-            print "      field = \"Max Fuel Adjustment (%)\", idleRumbleFuel, {idleRumbleEnabled == 1 && (idleRumbleMethod == 1 || idleRumbleMethod == 3)}";
+            print "      field = \"Max Timing Offset (deg)\", idleRumbleTiming";
+            print "      field = \"Max Fuel Adjustment (%)\", idleRumbleFuel";
             print "      field = \"\"";
             print "      field = \"===== Limits =====\"";
-            print "      field = \"Max Active RPM\", idleRumbleMaxRpm, {idleRumbleEnabled == 1}";
-            print "      field = \"Max Active TPS (%)\", idleRumbleMaxTps, {idleRumbleEnabled == 1}";
+            print "      field = \"Max Active RPM\", idleRumbleMaxRpm";
+            print "      field = \"Max Active TPS (%)\", idleRumbleMaxTps";
             print "";
           }
           { print }
