@@ -25,80 +25,36 @@ jobs:
           echo "📅 Build Timestamp: $BUILD_TIMESTAMP"
         shell: bash
       
-      - name: Install ARM Toolchain
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-arm-none-eabi mtools
-          arm-none-eabi-gcc --version
-          mcopy --version
-        shell: bash
-      
+      # Use rusEFI's official custom board build action
       - name: Build Warkop-X Firmware
-        run: |
-          export PROJECT_DIR=$PWD
-          cd ext/rusefi/firmware
-          make -j$(nproc) PROJECT_BOARD=warkop_x
-          echo "✅ Firmware build completed"
-        shell: bash
+        uses: ./ext/rusefi/.github/workflows/custom-board-build
+        with:
+          artifacts: bin hex ini
+          uploads: ''
+          push: 'false'
+          run_simulator: 'false'
       
-      - name: Check and list compiled firmware
-        run: |
-          echo "Testing compiled firmware..."
-          COMPILED_LIST=$(ls -lh ext/rusefi/firmware/build/rusefi*.bin 2>/dev/null || echo "")
-          
-          if [ -z "$COMPILED_LIST" ]; then
-            echo "ERROR: No firmware binaries found!"
-            exit 1
-          fi
-          
-          echo "Found firmware files:"
-          echo "$COMPILED_LIST"
-        shell: bash
-      
-      - name: Prepare firmware artifacts with timestamp in filename
+      # Prepare artifacts with timestamp
+      - name: Prepare firmware artifacts with timestamp
         run: |
           BUILD_TIMESTAMP="${{steps.set-variables.outputs.build_timestamp}}"
           
           mkdir -p firmware-artifacts
           
-          # Copy firmware binary with timestamp
-          echo "Copying firmware artifacts..."
-          cp ext/rusefi/firmware/build/rusefi.bin firmware-artifacts/rusefi_warkop_x_${BUILD_TIMESTAMP}.bin
-          
-          # Create README for easier identification
-          echo "Warkop-X ECU Firmware Build" > firmware-artifacts/README.txt
-          echo "===========================" >> firmware-artifacts/README.txt
-          echo "Board: Warkop-X (STM32F407VET6 - 512KB Flash)" >> firmware-artifacts/README.txt
-          echo "Build Date: ${BUILD_TIMESTAMP}" >> firmware-artifacts/README.txt
-          echo "Commit: ${GITHUB_SHA:0:8}" >> firmware-artifacts/README.txt
-          echo "Branch: ${GITHUB_REF_NAME}" >> firmware-artifacts/README.txt
-          echo "" >> firmware-artifacts/README.txt
-          echo "Files:" >> firmware-artifacts/README.txt
-          echo "------" >> firmware-artifacts/README.txt
-          echo "- rusefi_warkop_x_${BUILD_TIMESTAMP}.bin : Main firmware binary" >> firmware-artifacts/README.txt
-          echo "- rusefi_warkop_x_${BUILD_TIMESTAMP}.ini : TunerStudio config" >> firmware-artifacts/README.txt
-          echo "" >> firmware-artifacts/README.txt
-          echo "How to use:" >> firmware-artifacts/README.txt
-          echo "-----------" >> firmware-artifacts/README.txt
-          echo "1. Flash the .bin file to your Warkop-X ECU" >> firmware-artifacts/README.txt
-          echo "2. Load the .ini file in TunerStudio" >> firmware-artifacts/README.txt
-          echo "3. Connect and tune!" >> firmware-artifacts/README.txt
-          
-          echo "Artifacts prepared successfully"
-          ls -lh firmware-artifacts/
-        shell: bash
-      
-      - name: Verify .ini file exists
-        run: |
-          TIMESTAMP="${{steps.set-variables.outputs.build_timestamp}}"
-          INI_FILE="rusefi_warkop_x_${TIMESTAMP}.ini"
-          
-          if [ ! -f "$INI_FILE" ]; then
-            echo "ERROR: .ini file not generated!"
-            echo "Looking for files matching pattern:"
-            ls -lh *warkop*.ini || true
-            exit 1
+          # Copy firmware binary
+          if [ -f ext/rusefi/firmware/deliver/rusefi.bin ]; then
+            cp ext/rusefi/firmware/deliver/rusefi.bin firmware-artifacts/rusefi_warkop_x_${BUILD_TIMESTAMP}.bin
+            echo "✅ Binary copied"
           fi
+          
+          # Find and copy .ini file
+          INI_FILE=$(find generated/tunerstudio/generated -name "*.ini" 2>/dev/null | head -n 1)
+          if [ -n "$INI_FILE" ]; then
+            cp "$INI_FILE" rusefi_warkop_x_${BUILD_TIMESTAMP}.ini
+            echo "✅ INI copied: $INI_FILE"
+          fi
+          
+          ls -lh firmware-artifacts/
         shell: bash
 
       # Auto-patch TunerStudio .ini with custom Idle Rumble menu
@@ -131,6 +87,7 @@ jobs:
             print "   ; ===================================================================";
             print "   ; Idle Rumble Custom Dialog - Auto-patched by GitHub Actions";
             print "   ; ===================================================================";
+
             print "";
             print "   dialog = idleRumbleDialog, \"Idle Rumble Settings\"";
             print "      panel = idleRumblePanel";
@@ -179,24 +136,17 @@ jobs:
           echo "📝 .ini file now includes custom 'Idle Rumble' menu"
         shell: bash
 
-      # Upload Individual Artifacts with Very Clear Names
-      - name: Upload BINARY (.bin)
+      # Upload artifacts
+      - name: Upload Firmware Binary
         uses: actions/upload-artifact@v4
         with:
           name: firmware-warkop-x-BINARY
           path: firmware-artifacts/*.bin
           retention-days: 30
           
-      - name: Upload INI (TunerStudio config)
+      - name: Upload TunerStudio INI
         uses: actions/upload-artifact@v4
         with:
           name: firmware-warkop-x-INI
           path: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.ini
-          retention-days: 30
-          
-      - name: Upload README
-        uses: actions/upload-artifact@v4
-        with:
-          name: firmware-warkop-x-README
-          path: firmware-artifacts/README.txt
           retention-days: 30
