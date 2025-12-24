@@ -28,8 +28,9 @@ jobs:
       - name: Install ARM Toolchain
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-arm-none-eabi
+          sudo apt-get install -y gcc-arm-none-eabi mtools
           arm-none-eabi-gcc --version
+          mcopy --version
         shell: bash
       
       - name: Build Warkop-X Firmware
