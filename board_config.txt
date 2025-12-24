@@ -7,3 +7,41 @@
 ! New: ADC count based (0-1023 for 10-bit ADC)
 
 custom tps_limit_t 2 scalar, S16, @OFFSET@, "ADC", 1, 0, 0, 1023, 0
+! ============================================================================
+! Custom TunerStudio Dialog for Idle Rumble Feature
+! ============================================================================
+
+[Dialogs]
+   dialog = idleRumbleDialog, "Idle Rumble (Drumbal Effect)"
+      panel = idleRumblePanel
+      
+   panel = idleRumblePanel
+      field = "Enable Idle Rumble", idleRumbleEnabled
+      field = ""
+      field = "───── Basic Settings ─────"
+      field = "Rumble Amplitude (%)", idleRumbleAmplitude, {idleRumbleEnabled == 1}
+      field = "Rumble Speed (Period)", idleRumblePeriod, {idleRumbleEnabled == 1}
+      field = ""
+      field = "───── Method ─────"
+      field = "Rumble Method", idleRumbleMethod, {idleRumbleEnabled == 1}
+      field = "  0 = Timing Only"
+      field = "  1 = Fuel Only"
+      field = "  2 = Spark Cut"
+      field = "  3 = Combined (Timing + Fuel)"
+      field = ""
+      field = "───── Advanced ─────"
+      field = "Max Timing Offset (deg)", idleRumbleTiming, {idleRumbleEnabled == 1 && (idleRumbleMethod == 0 || idleRumbleMethod == 3)}
+      field = "Max Fuel Adjustment (%)", idleRumbleFuel, {idleRumbleEnabled == 1 && (idleRumbleMethod == 1 || idleRumbleMethod == 3)}
+      field = ""
+      field = "───── Activation Limits ─────"
+      field = "Max Active RPM", idleRumbleMaxRpm, {idleRumbleEnabled == 1}
+      field = "Max Active TPS (%)", idleRumbleMaxTps, {idleRumbleEnabled == 1}
+      field = ""
+      field = "───── Info ─────"
+      field = "Rumble creates aggressive idle sound"
+      field = "Works on cable throttle (no idle valve)"
+      field = "Start with Method 3, Amplitude 50%, Period 5"
+
+[Menu]
+   menuDialog = main
+      subMenu = idleRumbleDialog, "⚡ Idle Rumble"
