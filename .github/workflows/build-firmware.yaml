@@ -120,6 +120,9 @@ jobs:
             print ""; 
             print "   ; ═══════════════════════════════════════════════════════════";
             print "   ; Idle Rumble Custom Dialog - Auto-patched by GitHub Actions";
+            print "";
+            print "   idleRumbleMethodList = bits, U08, [0:1], \\\"Timing\\\", \\\"Fuel\\\", \\\"Spark\\\", \\\"Combined\\\"";
+            print "";
             print "   ; ═══════════════════════════════════════════════════════════";
             print "   dialog = idleRumbleDialog, \"⚡ Idle Rumble - Drumbal Effect\"";
             print "      panel = idleRumblePanel";
@@ -135,7 +138,7 @@ jobs:
             print "      field = \"Rumble Speed/Period\", idleRumblePeriod, {idleRumbleEnabled == 1}";
             print "      field = \"\"";
             print "      field = \"─────────── Method ───────────\"";
-            print "      field = \"Method\", idleRumbleMethod, {idleRumbleEnabled == 1}";
+            print "      field = \"Method\", idleRumbleMethod, idleRumbleMethodList, {idleRumbleEnabled == 1}";
             print "      field = \"\"";
             print "      field = \"─────────── Advanced ───────────\"";
             print "      field = \"Max Timing Offset (deg)\", idleRumbleTiming, {idleRumbleEnabled == 1 && (idleRumbleMethod == 0 || idleRumbleMethod == 3)}";
