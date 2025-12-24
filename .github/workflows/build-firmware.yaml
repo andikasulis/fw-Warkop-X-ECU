@@ -26,11 +26,11 @@ jobs:
         shell: bash
       
       - name: Build Warkop-X Firmware
-        uses: ./.github/actions/build-board
-        with:
-          board-name: warkop_x
-          efi-variant: EFI_PROD_CODE=1 USE_OPENBLT=yes
-          meta-info: R1-VET6
+        run: |
+          cd ext/rusefi/firmware
+          make -j$(nproc) BOARD=warkop_x EFI_PROD_CODE=1 USE_OPENBLT=yes
+          echo "✅ Firmware build completed"
+        shell: bash
       
       - name: Check and list compiled firmware
         run: |
