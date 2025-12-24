@@ -82,16 +82,19 @@ jobs:
           # Add dialog definition to [UserDefined] section
           awk '
           /^\[UserDefined\]/ { 
+            in_section=1;
             print;
-            print ""; 
+            next;
+          }
+          in_section && /^$/ && !dialog_added {
+            print "";
             print "   ; ===================================================================";
             print "   ; Idle Rumble Custom Dialog - Auto-patched by GitHub Actions";
             print "   ; ===================================================================";
-
             print "";
             print "   dialog = idleRumbleDialog, \"Idle Rumble Settings\"";
             print "      panel = idleRumblePanel";
-            print "      ";
+            print "";
             print "   panel = idleRumblePanel";
             print "      field = \"#Idle Rumble creates aggressive idle sound\"";
             print "      field = \"#Works with cable throttle (no idle valve)\"";
@@ -114,6 +117,7 @@ jobs:
             print "      field = \"Max Active RPM\", idleRumbleMaxRpm";
             print "      field = \"Max Active TPS (%)\", idleRumbleMaxTps";
             print "";
+            dialog_added=1;
           }
           { print }
           ' "$INI_FILE" > "${INI_FILE}.tmp"
