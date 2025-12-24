@@ -113,42 +113,38 @@ jobs:
           # Create backup
           cp "$INI_FILE" "${INI_FILE}.backup"
           
-          # Add dialog definition to [Dialogs] section
+          # Add dialog definition to [UserDefined] section
           awk '
-          BEGIN { patched=0 }
-          /^\[Dialogs\]/ { dialogs_section=1; print; next }
-          dialogs_section && /^\[/ && !patched { 
-            print ""
-            print "   ; ═══════════════════════════════════════════════════════════"
-            print "   ; Idle Rumble Custom Dialog - Auto-patched by GitHub Actions"
-            print "   ; ═══════════════════════════════════════════════════════════"
-            print "   dialog = idleRumbleDialog, \"⚡ Idle Rumble - Drumbal Effect\""
-            print "      panel = idleRumblePanel"
-            print "      "
-            print "   panel = idleRumblePanel"
-            print "      field = \"#Idle Rumble creates aggressive idle sound\""
-            print "      field = \"#Works with cable throttle (no idle valve)\""
-            print "      field = \"\""
-            print "      field = \"Enable Idle Rumble\", idleRumbleEnabled"
-            print "      field = \"\""
-            print "      field = \"─────────── Basic Settings ───────────\""
-            print "      field = \"Rumble Amplitude (%)\", idleRumbleAmplitude, {idleRumbleEnabled == 1}"
-            print "      field = \"Rumble Speed/Period\", idleRumblePeriod, {idleRumbleEnabled == 1}"
-            print "      field = \"\""
-            print "      field = \"─────────── Method ───────────\""
-            print "      field = \"Method\", idleRumbleMethod, {idleRumbleEnabled == 1}"
-            print "      field = \"  0=Timing 1=Fuel 2=Spark 3=Combined\""
-            print "      field = \"\""
-            print "      field = \"─────────── Advanced ───────────\""
-            print "      field = \"Max Timing Offset (deg)\", idleRumbleTiming, {idleRumbleEnabled == 1 && (idleRumbleMethod == 0 || idleRumbleMethod == 3)}"
-            print "      field = \"Max Fuel Adjustment (%)\", idleRumbleFuel, {idleRumbleEnabled == 1 && (idleRumbleMethod == 1 || idleRumbleMethod == 3)}"
-            print "      field = \"\""
-            print "      field = \"─────────── Limits ───────────\""
-            print "      field = \"Max Active RPM\", idleRumbleMaxRpm, {idleRumbleEnabled == 1}"
-            print "      field = \"Max Active TPS (%)\", idleRumbleMaxTps, {idleRumbleEnabled == 1}"
-            print ""
-            patched=1
-            dialogs_section=0
+          /^\[UserDefined\]/ { 
+            print;
+            print ""; 
+            print "   ; ═══════════════════════════════════════════════════════════";
+            print "   ; Idle Rumble Custom Dialog - Auto-patched by GitHub Actions";
+            print "   ; ═══════════════════════════════════════════════════════════";
+            print "   dialog = idleRumbleDialog, \"⚡ Idle Rumble - Drumbal Effect\"";
+            print "      panel = idleRumblePanel";
+            print "      ";
+            print "   panel = idleRumblePanel";
+            print "      field = \"#Idle Rumble creates aggressive idle sound\"";
+            print "      field = \"#Works with cable throttle (no idle valve)\"";
+            print "      field = \"\"";
+            print "      field = \"Enable Idle Rumble\", idleRumbleEnabled";
+            print "      field = \"\"";
+            print "      field = \"─────────── Basic Settings ───────────\"";
+            print "      field = \"Rumble Amplitude (%)\", idleRumbleAmplitude, {idleRumbleEnabled == 1}";
+            print "      field = \"Rumble Speed/Period\", idleRumblePeriod, {idleRumbleEnabled == 1}";
+            print "      field = \"\"";
+            print "      field = \"─────────── Method ───────────\"";
+            print "      field = \"Method\", idleRumbleMethod, {idleRumbleEnabled == 1}";
+            print "      field = \"\"";
+            print "      field = \"─────────── Advanced ───────────\"";
+            print "      field = \"Max Timing Offset (deg)\", idleRumbleTiming, {idleRumbleEnabled == 1 && (idleRumbleMethod == 0 || idleRumbleMethod == 3)}";
+            print "      field = \"Max Fuel Adjustment (%)\", idleRumbleFuel, {idleRumbleEnabled == 1 && (idleRumbleMethod == 1 || idleRumbleMethod == 3)}";
+            print "      field = \"\"";
+            print "      field = \"─────────── Limits ───────────\"";
+            print "      field = \"Max Active RPM\", idleRumbleMaxRpm, {idleRumbleEnabled == 1}";
+            print "      field = \"Max Active TPS (%)\", idleRumbleMaxTps, {idleRumbleEnabled == 1}";
+            print "";
           }
           { print }
           ' "$INI_FILE" > "${INI_FILE}.tmp"

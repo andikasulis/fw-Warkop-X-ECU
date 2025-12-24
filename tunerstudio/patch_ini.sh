@@ -81,10 +81,17 @@ cat > "$PATCH_FILE" << 'EOF_PATCH'
 
 EOF_PATCH
 
-# Find [Dialogs] section and add dialog before next section
+# Find [UserDefined] section and add dialog after it
 awk -v patch="$(cat $PATCH_FILE)" '
-/^\[Dialogs\]/ { dialogs_section=1; print; next }
-dialogs_section && /^\[/ { print patch; dialogs_section=0 }
+/^\[UserDefined\]/ { 
+    print; 
+    print "";
+    print "; ---------------------------------------------------------";
+    print "; Idle Rumble Dialog Definition (Auto-patched)";
+    print "; ---------------------------------------------------------";
+    print patch; 
+    next 
+}
 { print }
 ' "$INI_FILE" > "${INI_FILE}.tmp"
 
