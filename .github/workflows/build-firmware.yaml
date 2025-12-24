@@ -1,93 +1,96 @@
-name: Create Board Firmware
+name: Build Firmware
 
 on:
-  schedule:
-    - cron: '0 0 * * *' # build fresh every midnight (that help local compilation by having local and remote date in signature match)
   push:
-  #  pull_request:
+    branches:
+      - dev-feat-rumble
   workflow_dispatch:
 
 jobs:
-  build-firmware:
+  build:
     runs-on: ubuntu-latest
-    env:
-      TZ: Asia/Jakarta  # Set timezone to WIB (UTC+7)
+    
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository with submodules
+        uses: actions/checkout@v4
         with:
-          submodules: true
-
-      - name: Set run variables
+          submodules: 'recursive'
+          fetch-depth: 0
+      
+      - name: Set build variables
         id: set-variables
         run: |
-          BUILD_TIMESTAMP=$(date +'%Y-%m-%d_%H-%M')
-          echo "build_timestamp=${BUILD_TIMESTAMP}" >> $GITHUB_OUTPUT
-          if [ "${{github.event_name}}" = "schedule" ]; then
-            echo "release_date=${BUILD_TIMESTAMP}" >> $GITHUB_ENV
-          fi
-          if [ "${{github.event_name}}" == "push" -o "${{github.event_name}}" == "schedule" -o "${{github.event_name}}" == "workflow_dispatch" ] && [ "${{github.ref}}" == "refs/heads/master" -o "${{github.ref}}" == "refs/heads/main" ]; then
-            echo 'extra_makefile_targets=build_both_bundles' >> $GITHUB_OUTPUT
-            echo 'upload=ftp_upload_bundles' >> $GITHUB_OUTPUT
-            echo 'push=true' >> $GITHUB_OUTPUT
-            echo 'sim=true' >> $GITHUB_OUTPUT
-          else
-            echo 'push=false' >> $GITHUB_OUTPUT
-            echo 'sim=false' >> $GITHUB_OUTPUT
-          fi
-
-      - uses: ./ext/rusefi/.github/workflows/custom-board-build
+          BUILD_TIMESTAMP=$(TZ='Asia/Jakarta' date +'%Y-%m-%d_%H-%M')
+          echo "build_timestamp=$BUILD_TIMESTAMP" >> $GITHUB_OUTPUT
+          echo "📅 Build Timestamp: $BUILD_TIMESTAMP"
+        shell: bash
+      
+      - name: Build Warkop-X Firmware
+        uses: ./.github/actions/build-board
         with:
-          new_tag: ${{steps.set-variables.outputs.release_date}}
-          artifacts: bin srec hex list map elf bundle autoupdate
-          # see above about un-commenting
-          uploads: ini ${{steps.set-variables.outputs.upload}}
-          push: ${{steps.set-variables.outputs.push}}
-          run_simulator: ${{ steps.set-variables.outputs.sim }}
-          MY_REPO_PAT: ${{secrets.MY_REPO_PAT}}
-          RUSEFI_ONLINE_FTP_USER: ${{secrets.RUSEFI_ONLINE_FTP_USER}}
-          RUSEFI_ONLINE_FTP_PASS: ${{secrets.RUSEFI_ONLINE_FTP_PASS}}
-          RUSEFI_FTP_SERVER: ${{secrets.RUSEFI_FTP_SERVER}}
-          RUSEFI_SSH_SERVER: ${{secrets.RUSEFI_SSH_SERVER}}
-          RUSEFI_SSH_USER: ${{secrets.RUSEFI_SSH_USER}}
-          RUSEFI_SSH_PASS: ${{secrets.RUSEFI_SSH_PASS}}
-          ADDITIONAL_ENV: RUSEFI_BUILD_DATE=${{steps.set-variables.outputs.build_timestamp}}
+          board-name: warkop_x
+          efi-variant: EFI_PROD_CODE=1 USE_OPENBLT=yes
+          meta-info: R1-VET6
+      
+      - name: Check and list compiled firmware
+        run: |
+          echo "Testing compiled firmware..."
+          COMPILED_LIST=$(ls -lh ext/rusefi/firmware/build/rusefi*.bin 2>/dev/null || echo "")
+          
+          if [ -z "$COMPILED_LIST" ]; then
+            echo "ERROR: No firmware binaries found!"
+            exit 1
+          fi
+          
+          echo "Found firmware files:"
+          echo "$COMPILED_LIST"
+        shell: bash
+      
+      - name: Prepare firmware artifacts with timestamp in filename
+        run: |
+          BUILD_TIMESTAMP="${{steps.set-variables.outputs.build_timestamp}}"
+          
+          mkdir -p firmware-artifacts
+          
+          # Copy firmware binary with timestamp
+          echo "Copying firmware artifacts..."
+          cp ext/rusefi/firmware/build/rusefi.bin firmware-artifacts/rusefi_warkop_x_${BUILD_TIMESTAMP}.bin
+          
+          # Create README for easier identification
+          cat > firmware-artifacts/README.txt << EOF
+Warkop-X ECU Firmware Build
+===========================
+Board: Warkop-X (STM32F407VET6 - 512KB Flash)
+Build Date: ${BUILD_TIMESTAMP}
+Commit: ${GITHUB_SHA:0:8}
+Branch: ${GITHUB_REF_NAME}
 
-      # Rename binary files with surgical precision
-      - name: Prepare Precise Artifacts
+Files:
+------
+- rusefi_warkop_x_${BUILD_TIMESTAMP}.bin   : Main firmware binary (Flash to ECU)
+- rusefi_warkop_x_${BUILD_TIMESTAMP}.ini   : TunerStudio configuration
+
+How to use:
+-----------
+1. Flash the .bin file to your Warkop-X ECU
+2. Load the .ini file in TunerStudio
+3. Connect and tune!
+EOF
+          
+          echo "Artifacts prepared successfully"
+          ls -lh firmware-artifacts/
+        shell: bash
+      
+      - name: Verify .ini file exists
         run: |
           TIMESTAMP="${{steps.set-variables.outputs.build_timestamp}}"
+          INI_FILE="rusefi_warkop_x_${TIMESTAMP}.ini"
           
-          # 1. Cari binary asli (297KB) - biasanya ada di folder build rusefi
-          # Kita cari secara kumulatif tapi laporkan sizenya
-          echo "=== Debug: Checking file sizes ==="
-          ls -l rusefi* 2>/dev/null || true
-          ls -l bin/rusefi* 2>/dev/null || true
-          
-          # Target file .bin (HARUS ~297KB)
-          BIN_SRC=$(ls bin/rusefi.bin 2>/dev/null || ls rusefi.bin 2>/dev/null || find . -name "rusefi.bin" | head -n 1)
-          if [ -n "$BIN_SRC" ]; then
-            cp "$BIN_SRC" "rusefi_warkop_x_${TIMESTAMP}.bin"
-            SIZE_BYTES=$(stat -c%s "$BIN_SRC")
-            echo "✓ BINARY FOUND: $BIN_SRC"
-            echo "  - Size: $SIZE_BYTES bytes (Expect ~304000 for 297KB)"
-            echo "  - Renamed to: rusefi_warkop_x_${TIMESTAMP}.bin"
-          fi
-
-          # Target file .hex (~474KB)
-          HEX_SRC=$(ls bin/rusefi.hex 2>/dev/null || ls rusefi.hex 2>/dev/null || find . -name "rusefi.hex" | head -n 1)
-          if [ -n "$HEX_SRC" ]; then
-            cp "$HEX_SRC" "rusefi_warkop_x_${TIMESTAMP}.hex"
-            SIZE_BYTES=$(stat -c%s "$HEX_SRC")
-            echo "✓ HEX FOUND: $HEX_SRC"
-            echo "  - Size: $SIZE_BYTES bytes (Expect ~485000 for 474KB)"
-            echo "  - Renamed to: rusefi_warkop_x_${TIMESTAMP}.hex"
-          fi
-
-          # Target file .ini (~138KB)
-          INI_SRC=$(find . -name "rusefi_warkop_x.ini" | head -n 1)
-          if [ -n "$INI_SRC" ]; then
-            cp "$INI_SRC" "rusefi_warkop_x_${TIMESTAMP}.ini"
-            echo "✓ INI: $INI_SRC ($(du -h $INI_SRC | cut -f1)) -> rusefi_warkop_x_${TIMESTAMP}.ini"
+          if [ ! -f "$INI_FILE" ]; then
+            echo "ERROR: .ini file not generated!"
+            echo "Looking for files matching pattern:"
+            ls -lh *warkop*.ini || true
+            exit 1
           fi
         shell: bash
 
@@ -118,13 +121,11 @@ jobs:
           /^\[UserDefined\]/ { 
             print;
             print ""; 
-            print "   ; ═══════════════════════════════════════════════════════════";
+            print "   ; ===================================================================";
             print "   ; Idle Rumble Custom Dialog - Auto-patched by GitHub Actions";
+            print "   ; ===================================================================";
             print "";
-            print "   idleRumbleMethodList = bits, U08, [0:1], \\\"Timing\\\", \\\"Fuel\\\", \\\"Spark\\\", \\\"Combined\\\"";
-            print "";
-            print "   ; ═══════════════════════════════════════════════════════════";
-            print "   dialog = idleRumbleDialog, \"⚡ Idle Rumble - Drumbal Effect\"";
+            print "   dialog = idleRumbleDialog, \"Idle Rumble Settings\"";
             print "      panel = idleRumblePanel";
             print "      ";
             print "   panel = idleRumblePanel";
@@ -133,18 +134,19 @@ jobs:
             print "      field = \"\"";
             print "      field = \"Enable Idle Rumble\", idleRumbleEnabled";
             print "      field = \"\"";
-            print "      field = \"─────────── Basic Settings ───────────\"";
+            print "      field = \"===== Basic Settings =====\"";
             print "      field = \"Rumble Amplitude (%)\", idleRumbleAmplitude, {idleRumbleEnabled == 1}";
             print "      field = \"Rumble Speed/Period\", idleRumblePeriod, {idleRumbleEnabled == 1}";
             print "      field = \"\"";
-            print "      field = \"─────────── Method ───────────\"";
-            print "      field = \"Method\", idleRumbleMethod, idleRumbleMethodList, {idleRumbleEnabled == 1}";
+            print "      field = \"===== Method =====\"";
+            print "      field = \"#0=Timing, 1=Fuel, 2=Spark, 3=Combined\"";
+            print "      field = \"Method\", idleRumbleMethod, {idleRumbleEnabled == 1}";
             print "      field = \"\"";
-            print "      field = \"─────────── Advanced ───────────\"";
+            print "      field = \"===== Advanced =====\"";
             print "      field = \"Max Timing Offset (deg)\", idleRumbleTiming, {idleRumbleEnabled == 1 && (idleRumbleMethod == 0 || idleRumbleMethod == 3)}";
             print "      field = \"Max Fuel Adjustment (%)\", idleRumbleFuel, {idleRumbleEnabled == 1 && (idleRumbleMethod == 1 || idleRumbleMethod == 3)}";
             print "      field = \"\"";
-            print "      field = \"─────────── Limits ───────────\"";
+            print "      field = \"===== Limits =====\"";
             print "      field = \"Max Active RPM\", idleRumbleMaxRpm, {idleRumbleEnabled == 1}";
             print "      field = \"Max Active TPS (%)\", idleRumbleMaxTps, {idleRumbleEnabled == 1}";
             print "";
@@ -159,7 +161,7 @@ jobs:
           /menuDialog = main/ { in_menu=1; print; next }
           in_menu && /^   / && !menu_added {
             print "      ; Custom Idle Rumble Menu (auto-patched)"
-            print "      subMenu = idleRumbleDialog, \"⚡ Idle Rumble\""
+            print "      subMenu = idleRumbleDialog, \"Idle Rumble\""
             menu_added=1
           }
           { print }
@@ -167,24 +169,27 @@ jobs:
           mv "${INI_FILE}.tmp" "$INI_FILE"
           
           echo "✅ Patch applied successfully!"
-          echo "📝 .ini file now includes custom '⚡ Idle Rumble' menu"
+          echo "📝 .ini file now includes custom 'Idle Rumble' menu"
         shell: bash
 
       # Upload Individual Artifacts with Very Clear Names
       - name: Upload BINARY (.bin)
         uses: actions/upload-artifact@v4
         with:
-          name: Firmware_BINARY_297KB_${{steps.set-variables.outputs.build_timestamp}}
-          path: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.bin
-
-      - name: Upload HEX (.hex)
+          name: firmware-warkop-x-BINARY
+          path: firmware-artifacts/*.bin
+          retention-days: 30
+          
+      - name: Upload INI (TunerStudio config)
         uses: actions/upload-artifact@v4
         with:
-          name: Firmware_HEX_474KB_${{steps.set-variables.outputs.build_timestamp}}
-          path: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.hex
-
-      - name: Upload TunerStudio INI
-        uses: actions/upload-artifact@v4
-        with:
-          name: TunerStudio_INI_${{steps.set-variables.outputs.build_timestamp}}
+          name: firmware-warkop-x-INI
           path: rusefi_warkop_x_${{steps.set-variables.outputs.build_timestamp}}.ini
+          retention-days: 30
+          
+      - name: Upload README
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-warkop-x-README
+          path: firmware-artifacts/README.txt
+          retention-days: 30
