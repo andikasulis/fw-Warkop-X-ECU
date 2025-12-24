@@ -35,7 +35,9 @@ jobs:
       
       - name: Build Warkop-X Firmware
         run: |
-          make -j$(nproc)
+          export PROJECT_DIR=$PWD
+          cd ext/rusefi/firmware
+          make -j$(nproc) PROJECT_BOARD=warkop_x
           echo "✅ Firmware build completed"
         shell: bash
       
