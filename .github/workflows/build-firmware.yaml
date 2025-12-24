@@ -57,7 +57,7 @@ jobs:
           cp ext/rusefi/firmware/build/rusefi.bin firmware-artifacts/rusefi_warkop_x_${BUILD_TIMESTAMP}.bin
           
           # Create README for easier identification
-          cat > firmware-artifacts/README.txt << EOF
+          cat > firmware-artifacts/README.txt << 'EOF'
 Warkop-X ECU Firmware Build
 ===========================
 Board: Warkop-X (STM32F407VET6 - 512KB Flash)
