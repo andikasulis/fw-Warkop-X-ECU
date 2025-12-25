@@ -252,7 +252,15 @@ Halaman ini berisi:
 2. Jendela baru terbuka - ini lembar kosong
 3. Atur ukuran halaman A4 mendatar
 
-### Langkah 2: Tambah Simbol STM32F407
+### Langkah 2: Tambah Mikrokontroler Utama (Main Microcontroller)
+
+#### 📌 Section: "STM32F407VGT6 - Main MCU"
+
+**Komponen**: U1 (STM32F407VGT6)  
+**Posisi**: 161.0, -90.3 (tengah PCB)  
+**Fungsi**: Otak ECU - mengatur semua fungsi
+
+**Cara tambah simbol:** STM32F407
 
 1. Tekan **A** (Tambah Simbol)
 2. Di kotak pencarian, ketik: `STM32F407VGTx`
@@ -269,7 +277,11 @@ Telusuri ke:
 Pilih: MCU_ST_STM32F4.kicad_sym
 ```
 
-### Langkah 3: Tambah Kapasitor Peredam
+### Langkah 3: Tambah Kapasitor Peredam (Power Distribution)
+
+#### 📌 Section: "VDD Power Distribution & Decoupling"
+
+**Fungsi section ini**: Stabilkan tegangan power ke MCU Peredam
 
 **Apa itu kapasitor peredam?** 
 - Kapasitor kecil dekat kaki daya IC
@@ -290,7 +302,6 @@ Pilih: MCU_ST_STM32F4.kicad_sym
 
 **Referensi komponen:**
 - Ubah nama dari C1, C2, ... jadi C3, C4, C9, C10, C11, C15, C18, C20, C24, C47
-- Cara: Arahkan, tekan **E**, edit "Reference"
 
 ### Langkah 4: Hubungkan Daya ke MCU
 
@@ -312,7 +323,11 @@ Pilih: MCU_ST_STM32F4.kicad_sym
 - Sisi positif (atas) → kabel VDD
 - Sisi negatif (bawah) → kabel GND
 
-### Langkah 5: Tambah Rangkaian Kristal (8MHz)
+### Langkah 5: Tambah Sistem Clock Utama (Main Clock System)
+
+#### 📌 Section: "8MHz Main Oscillator"
+
+**Fungsi**: Detak jantung MCU - mengatur kecepatan prosesor
 
 **Komponen yang dibutuhkan:**
 - Y1 (Kristal_8MHz)
@@ -336,12 +351,20 @@ Pilih: MCU_ST_STM32F4.kicad_sym
 
 ### Langkah 6: Tambah Kristal 32kHz (RTC)
 
+#### 📌 Section: "32kHz RTC Oscillator"
+
+**Fungsi**: Jam real-time untuk MCU
+
 **Proses sama:**
 - Y2: Crystal_Small, nilai `32.768kHz`
 - C27, C28: 20pF masing-masing
 - Hubungkan ke U1 Kaki 3 (PC14) dan Kaki 4 (PC15)
 
-### Langkah 7: Rangkaian Reset
+### Langkah 7: Rangkaian Reset (Reset Circuit)
+
+#### 📌 Section: "MCU Reset & Boot Configuration"
+
+**Fungsi**: Tombol restart ECU
 
 **Komponen:**
 - SW1: Tombol tekan
@@ -356,6 +379,10 @@ NRST → [C2] → GND
 ```
 
 ### Langkah 8: Antarmuka USB (Sederhana)
+
+#### 📌 Section: "USB Type-C Interface"
+
+**Fungsi**: Koneksi ke komputer untuk debugging/flashing
 
 **Untuk saat ini, tambahkan konektor saja:**
 1. Tempatkan J3 (konektor Type-C)
@@ -512,7 +539,12 @@ Halaman ini mengatur **sinyal masuk dari sensor** agar lebih bersih dan stabil s
 
 ---
 
-## Langkah 2: Tambah IC Pembentuk Sinyal
+## Langkah 2: Tambah Pembentuk Sinyal Digital
+
+#### 📌 Section: "Schmitt Trigger Buffers - Signal Conditioning"
+
+**Komponen**: IC1, IC2 (SN74LVC2G17DBVR)  
+**Fungsi**: Bersihkan sinyal kotor dari sensor
 
 ### IC1 dan IC2: SN74LVC2G17
 
@@ -536,6 +568,11 @@ Halaman ini mengatur **sinyal masuk dari sensor** agar lebih bersih dan stabil s
 ---
 
 ## Langkah 3: Tambah Jumper Hall/VR
+
+#### 📌 Section: "Hall/VR Sensor Input Selection"
+
+**Komponen**: JP8, JP9 (Jumper 3-pin)  
+**Fungsi**: Pilih jenis sensor (Hall atau VR)
 
 ### JP8, JP9: Pemilih Jenis Sensor
 
@@ -561,6 +598,11 @@ Halaman ini mengatur **sinyal masuk dari sensor** agar lebih bersih dan stabil s
 
 ## Langkah 4: Tambah Jumper Pull-Up
 
+#### 📌 Section: "Optional Pull-Up Jumpers"
+
+**Komponen**: JP2, JP7 (Jumper 2-pin)  
+**Fungsi**: Aktifkan/nonaktifkan pull-up resistor untuk input tertentu
+
 ### JP2, JP7: Pull-Up Optional
 
 **Fungsi**: Tarikan ke atas untuk input tertentu
@@ -578,6 +620,10 @@ Halaman ini mengatur **sinyal masuk dari sensor** agar lebih bersih dan stabil s
 ---
 
 ## Langkah 5: Hubungkan ke MCU
+
+#### 📌 Section: "Hierarchical Connections to MCU"
+
+**Fungsi**: Menghubungkan sinyal dari halaman ini ke pin MCU
 
 **Gunakan label hirarkis** untuk hubung ke Halaman 1 (Inti MCU):
 
@@ -629,7 +675,12 @@ Halaman ini mengubah **tegangan baterai 12V** menjadi:
 
 ---
 
-## Langkah 2: Tambah Input Daya
+## Langkah 2: Tambah Konektor Input Daya
+
+#### 📌 Section: "12V Battery Input & Protection"
+
+**Konektor**: J4, J7, J8  
+**Fungsi**: Sambungan ke baterai 12V mobil
 
 ### Konektor J4, J7, J8
 
@@ -648,6 +699,11 @@ Halaman ini mengubah **tegangan baterai 12V** menjadi:
 ---
 
 ## Langkah 3: Tambah Sekering
+
+#### 📌 Section: "Input Fuses"
+
+**Komponen**: F1, F2 (Polyfuse)  
+**Fungsi**: Melindungi sirkuit dari arus berlebih
 
 ### F1, F2: Sekering Polimer
 
@@ -669,6 +725,11 @@ Halaman ini mengubah **tegangan baterai 12V** menjadi:
 
 ## Langkah 4: Tambah Pelindung Reverse Polarity
 
+#### 📌 Section: "Reverse Polarity Protection"
+
+**Komponen**: D14 (Dioda Schottky SS14)  
+**Fungsi**: Mencegah kerusakan jika baterai terpasang terbalik
+
 ### D14: Dioda Schottky SS14
 
 **Fungsi**: Kalau baterai terpasang terbalik, dioda ini melindungi
@@ -687,6 +748,11 @@ Halaman ini mengubah **tegangan baterai 12V** menjadi:
 
 ## Langkah 5: Tambah TVS Dioda
 
+#### 📌 Section: "Transient Voltage Suppression (TVS)"
+
+**Komponen**: D15 (SMBJ40A)  
+**Fungsi**: Melindungi dari lonjakan tegangan tinggi (spike)
+
 ### D15: SMBJ40A
 
 **Fungsi**: Potong lonjakan tegangan tinggi (spike)
@@ -701,7 +767,12 @@ Halaman ini mengubah **tegangan baterai 12V** menjadi:
 
 ---
 
-## Langkah 6: Pengatur 5V
+## Langkah 6: Pengatur Tegangan 5V (5V Voltage Regulator)
+
+#### 📌 Section: "5V Power Supply - U8 NCV7805"
+
+**Input**: 12V dari baterai  
+**Output**: 5V stabil untuk sensor dan IC tertentu
 
 ### U8: NCV7805 (12V → 5V)
 
@@ -732,7 +803,12 @@ U8 VOUT → C17+ → +5V rail
 
 ---
 
-## Langkah 7: Pengatur 3.3V
+## Langkah 7: Pengatur Tegangan 3.3V (3.3V Voltage Regulator)
+
+#### 📌 Section: "3.3V Power Supply - U3 AMS1117"
+
+**Input**: 5V dari U8  
+**Output**: 3.3V untuk MCU dan logika digital
 
 ### U3: AMS1117-3.3 (5V → 3.3V)
 
@@ -760,6 +836,10 @@ U3 VOUT → C32+ → +3V3 rail
 ---
 
 ## Langkah 8: Distribusi Daya
+
+#### 📌 Section: "Power Rail Distribution"
+
+**Fungsi**: Menandai jalur daya utama untuk koneksi global
 
 **Tambah simbol daya:**
 1. Tekan **P**
@@ -810,7 +890,12 @@ Halaman ini memproses **sinyal sensor analog** (seperti sensor suhu, tekanan, po
 
 ---
 
-## Langkah 2: Tambah Op-Amp
+## Langkah 2: Tambah Penguat Sinyal Analog (Op-Amp)
+
+#### 📌 Section: "Analog Signal Conditioning - MCP6004"
+
+**Komponen**: U5, U6 (Quad op-amp)  
+**Fungsi**: Kuatkan dan bersihkan sinyal sensor analog
 
 ### U5, U6: MCP6004 (Quad Op-Amp)
 
@@ -829,7 +914,12 @@ Halaman ini memproses **sinyal sensor analog** (seperti sensor suhu, tekanan, po
 
 ---
 
-## Langkah 3: Rangkaian MAP Sensor
+## Langkah 3: Input Sensor Tekanan Intake (MAP Sensor Input)
+
+#### 📌 Section: "MAP (Manifold Absolute Pressure) Sensor"
+
+**Fungsi**: Ukur tekanan di intake manifold  
+**Range**: 0-5V dari sensor → dikecilkan ke 0-3.3V
 
 **Input**: 0-5V dari sensor tekanan
 **Output**: 0-3.3V ke MCU ADC
@@ -850,7 +940,12 @@ Sensor MAP → [R 10k] → titik tengah → [R 2.7k] → GND
 
 ---
 
-## Langkah 4: Rangkaian TPS
+## Langkah 4: Input Sensor Posisi Throttle (TPS Input)
+
+#### 📌 Section: "TPS (Throttle Position Sensor)"
+
+**Fungsi**: Ukur seberapa buka gas/throttle  
+**Tipe**: Potentiometer 0-5V
 
 **Sama seperti MAP:**
 - Pembagi tegangan untuk turunkan 5V → 3.3V
@@ -859,7 +954,13 @@ Sensor MAP → [R 10k] → titik tengah → [R 2.7k] → GND
 
 ---
 
-## Langkah 5: Rangkaian CLT/IAT (Sensor Suhu)
+## Langkah 5: Input Sensor Suhu Mesin (Temperature Sensors)
+
+#### 📌 Section: "CLT (Coolant) & IAT (Intake Air) Temperature"
+
+**CLT**: Suhu air radiator  
+**IAT**: Suhu udara masuk  
+**Tipe**: Thermistor NTC (resistance turun saat panas)
 
 **Jenis**: Termistor NTC (resistance turun saat panas)
 
@@ -880,6 +981,9 @@ Sensor MAP → [R 10k] → titik tengah → [R 2.7k] → GND
 
 ## Langkah 6: Rangkaian O2 Sensor
 
+#### 📌 Section: "O2 (Oxygen) Sensor Input"
+
+**Fungsi**: Mengukur kadar oksigen di gas buang  
 **Output sensor**: 0-1V (narrowband)
 
 **Rangkaian sederhana:**
@@ -892,6 +996,11 @@ Sensor MAP → [R 10k] → titik tengah → [R 2.7k] → GND
 ---
 
 ## Langkah 7: Pelindung ESD
+
+#### 📌 Section: "ESD Protection Diodes"
+
+**Komponen**: D? (BAT54S Dual Schottky)  
+**Fungsi**: Melindungi input sensor dari pelepasan elektrostatik
 
 ### D?: BAT54S (Dual Schottky)
 
@@ -912,6 +1021,10 @@ Sensor MAP → [R 10k] → titik tengah → [R 2.7k] → GND
 ---
 
 ## Langkah 8: Hubungkan ke MCU
+
+#### 📌 Section: "Hierarchical Connections to MCU ADC"
+
+**Fungsi**: Menghubungkan sinyal analog yang sudah diproses ke pin ADC MCU
 
 **Label hirarkis ke ADC pins:**
 
@@ -967,12 +1080,48 @@ Halaman ini mengendalikan **beban daya tinggi** seperti:
 
 ## Langkah 2: Tambah MOSFET Daya Tinggi
 
+#### 📌 Section: "High-Power MOSFET Drivers (Injectors/Coils)"
+
+**Komponen**: Q1-Q6, Q11 (STP62NS04Z)  
+**Fungsi**: Mengendalikan beban induktif besar seperti injektor dan koil pengapian
+
 ### Q1-Q6, Q11: STP62NS04Z
 
 **Spesifikasi**: 62A, 40V N-Channel MOSFET
 **Fungsi**: Nyalakan injektor, koil pengapian
 
-**Cara:**
+**Pengelompokan berdasar Skema Asli:**
+
+#### 📌 Injector Driver 1 (Pengendali Injektor 1)
+- **Q1**: STP62NS04Z @ 119.5,-105.26 (bottom)
+- Untuk Injector channel 1
+- Input: MCU_D5 (dari MCU)
+
+#### 📌 Injector Driver 2  
+- **Q2**: STP62NS04Z @ 145.75,-105.26 (bottom)
+- Untuk Injector channel 2
+- Input: MCU_D7
+
+#### 📌 Injector Driver 3
+- **Q3**: STP62NS04Z @ 128.25,-105.26 (bottom)  
+- Untuk Injector channel 3
+- Input: MCU_D6
+
+#### 📌 Injector Driver 4 (Pengendali Injektor 4)
+- **Q4**: STP62NS04Z @ 137.0,-105.26 (bottom)
+- Untuk Injector channel 4
+- Input: MCU_D4
+
+#### 📌 Injector Driver (Additional)
+- **Q6**: STP62NS04Z @ 154.445,-105.26 (bottom)
+- Channel tambahan
+
+#### 📌 Ignition Driver 1 (Pengendali Koil Pengapian 1)
+- **Q11**: STP62NS04Z @ 162.98,-105.26 (bottom)
+- Untuk Ignition coil
+- Input: dari gate driver
+
+**Cara menempatkan:**
 1. Tekan **A**
 2. Ketik: `Q_NMOS_GDS`
 3. Package: `TO-252-3`
@@ -986,6 +1135,11 @@ Halaman ini mengendalikan **beban daya tinggi** seperti:
 ---
 
 ## Langkah 3: Tambah Pengendali Gerbang
+
+#### 📌 Section: "MOSFET Gate Drivers"
+
+**Komponen**: U2 (TC4424AVOA)  
+**Fungsi**: Menguatkan sinyal PWM dari MCU untuk menggerakkan MOSFET daya tinggi dengan cepat
 
 ### U2: TC4424AVOA (Dual MOSFET Driver)
 
@@ -1016,6 +1170,11 @@ Q1 Drain → Injektor → +12V
 
 ## Langkah 4: Tambah Resistor Gerbang
 
+#### 📌 Section: "Gate Resistors"
+
+**Komponen**: R52, R53 (15Ω)  
+**Fungsi**: Membatasi arus gerbang MOSFET dan meredam osilasi
+
 ### R52, R53: 15Ω (Package 2512)
 
 **Fungsi**: Batasi arus gate, redam getaran
@@ -1032,6 +1191,11 @@ Q1 Drain → Injektor → +12V
 ---
 
 ## Langkah 5: Tambah Dioda Flyback
+
+#### 📌 Section: "Flyback Diodes"
+
+**Komponen**: D13, D16, D25-D33 (1N5819W)  
+**Fungsi**: Melindungi MOSFET dari tegangan balik tinggi yang dihasilkan oleh beban induktif
 
 ### D13, D16, D25-D33: 1N5819W
 
@@ -1052,6 +1216,11 @@ Q1 Drain → Injektor → +12V
 ---
 
 ## Langkah 6: MOSFET Daya Rendah
+
+#### 📌 Section: "Low-Power MOSFET Drivers"
+
+**Komponen**: Q5, Q7-Q10 (AO3400A)  
+**Fungsi**: Mengendalikan beban daya rendah seperti relay, LED, atau solenoid kecil
 
 ### Q5, Q7-Q10: AO3400A
 
@@ -1078,6 +1247,11 @@ Beban → +12V
 
 ## Langkah 7: Saklar Sisi Tinggi
 
+#### 📌 Section: "High-Side Switches"
+
+**Komponen**: Q12, Q13 (ISL9V3040D3S P-Channel)  
+**Fungsi**: Menyalakan atau mematikan daya +12V ke sensor atau periferal lain
+
 ### Q12, Q13: ISL9V3040D3S (P-Channel)
 
 **Fungsi**: Nyalakan +12V ke sensor/peripheral
@@ -1099,6 +1273,10 @@ MCU GPIO LOW → [inverter] → Gate (untuk ON)
 ---
 
 ## Langkah 8: Hubungkan ke MCU & Beban
+
+#### 📌 Section: "Hierarchical Connections to MCU & Outputs"
+
+**Fungsi**: Menghubungkan sinyal kontrol dari MCU dan sinyal output ke konektor
 
 **Dari MCU (Halaman 1):**
 - Label hirarkis: `PWM_INJ1`, `PWM_INJ2`, `PWM_IGN1`, dll
@@ -1144,7 +1322,13 @@ Halaman ini menangani **komunikasi dengan alat lain**:
 
 ---
 
-## Langkah 2: Tambah CAN Transceiver
+## Langkah 2: Tambah Transceiver CAN Bus
+
+#### 📌 Section: "CAN Communication Interface"
+
+**Komponen**: U7 (TJA1051T)  
+**Fungsi**: Komunikasi dengan ECU lain / dashboard via CAN bus  
+**Kecepatan**: Sampai 1 Mbps
 
 ### U7: TJA1051T (CAN Transceiver)
 
@@ -1174,6 +1358,10 @@ Halaman ini menangani **komunikasi dengan alat lain**:
 
 ## Langkah 3: Hubungkan CAN ke MCU
 
+#### 📌 Section: "CAN to MCU Connections"
+
+**Fungsi**: Menghubungkan pin CAN transceiver ke pin CAN di MCU
+
 **Dari Halaman 1 (MCU):**
 - MCU CAN1_TX (contoh: PB9) → Label `CAN_TX`
 - MCU CAN1_RX (contoh: PB8) → Label `CAN_RX`
@@ -1185,6 +1373,11 @@ Halaman ini menangani **komunikasi dengan alat lain**:
 ---
 
 ## Langkah 4: Tambah Resistor Terminasi CAN
+
+#### 📌 Section: "CAN Bus Termination Resistor"
+
+**Komponen**: R7 (120Ω)  
+**Fungsi**: Mencegah refleksi sinyal pada bus CAN
 
 ### R7: 120Ω
 
@@ -1205,6 +1398,11 @@ Halaman ini menangani **komunikasi dengan alat lain**:
 
 ## Langkah 5: Tambah Pelindung ESD CAN
 
+#### 📌 Section: "CAN Bus ESD Protection"
+
+**Komponen**: Dioda TVS  
+**Fungsi**: Melindungi jalur CAN dari pelepasan elektrostatik
+
 **Dioda TVS di garis CANH dan CANL:**
 
 **Cara:**
@@ -1216,13 +1414,23 @@ Halaman ini menangani **komunikasi dengan alat lain**:
 
 ## Langkah 6: Konektor CAN ke Luar
 
+#### 📌 Section: "External CAN Connector"
+
+**Fungsi**: Menyediakan titik koneksi fisik untuk bus CAN
+
 **Hubungkan ke konektor utama J9:**
 - CANH → J9 pin tertentu (label: `CAN_H`)
 - CANL → J9 pin tertentu (label: `CAN_L`)
 
 ---
 
-## Langkah 7: Tambah microSD Socket
+## Langkah 7: Tambah Slot Kartu MicroSD (Data Logger)
+
+#### 📌 Section: "microSD Card - SPI Storage"
+
+**Komponen**: J5 (microSD socket)  
+**Fungsi**: Simpan data logging (RPM, MAP, TPS, dll)  
+**Interface**: SPI
 
 ### J5: THD2528-11SD-GF (microSD Socket)
 
@@ -1245,6 +1453,10 @@ Halaman ini menangani **komunikasi dengan alat lain**:
 
 ## Langkah 8: Hubungkan SPI ke MCU
 
+#### 📌 Section: "SPI Connections to MCU"
+
+**Fungsi**: Menghubungkan pin SPI dari slot microSD ke pin SPI di MCU
+
 **Dari MCU (Halaman 1):**
 - Label hirarkis:
   - `SPI_SCK` → MCU SPI2_SCK (contoh: PB13)
@@ -1265,6 +1477,10 @@ Halaman ini menangani **komunikasi dengan alat lain**:
 ---
 
 ## Langkah 9: Card Detect (Optional)
+
+#### 📌 Section: "microSD Card Detect"
+
+**Fungsi**: Mendeteksi apakah kartu microSD terpasang atau tidak
 
 **Pin CD (Card Detect) di socket:**
 - Hubungkan ke MCU GPIO
@@ -1309,7 +1525,13 @@ Halaman ini berisi:
 
 ---
 
-## Langkah 2: Tambah Sensor Tekanan
+## Langkah 2: Tambah Sensor Tekanan Barometrik (Baro Sensor)
+
+#### 📌 Section: "LPS25HB - Barometric Pressure Sensor"
+
+**Komponen**: U9 (LPS25HB)  
+**Fungsi**: Ukur tekanan atmosfer untuk kompensasi altitude  
+**Interface**: I2C
 
 ### U9: LPS25HB (Barometric Pressure Sensor)
 
@@ -1332,6 +1554,10 @@ Halaman ini berisi:
 
 ## Langkah 3: Hubungkan I2C ke MCU
 
+#### 📌 Section: "I2C Connections to MCU"
+
+**Fungsi**: Menghubungkan sensor barometrik ke pin I2C di MCU
+
 **Dari MCU (Halaman 1):**
 - Label:
   - `I2C_SCL` → MCU I2C1_SCL (contoh: PB6)
@@ -1352,7 +1578,12 @@ Halaman ini berisi:
 
 ---
 
-## Langkah 4: Tambah LED Status
+## Langkah 4: Tambah LED Indikator Status
+
+#### 📌 Section: "Status LEDs - Visual Indicators"
+
+**Komponen**: LED1, LED2, LED3  
+**Fungsi**: Indikator visual status ECU
 
 ### LED1, LED2, LED3: LED Indikator
 
@@ -1382,6 +1613,11 @@ LED Katoda (-) → GND
 
 ## Langkah 5: Tambah LED di PCB
 
+#### 📌 Section: "On-Board Indicator LEDs"
+
+**Komponen**: D1-D8 (LED Indikator PCB)  
+**Fungsi**: Indikator tambahan yang terpasang langsung di PCB
+
 ### D1-D8: LED Indikator PCB
 
 **Sama seperti LED1-LED3:**
@@ -1396,7 +1632,9 @@ LED Katoda (-) → GND
 
 ## Langkah 6: Voltage Sensing (Tegangan Baterai)
 
-**Fungsi**: Monitor tegangan baterai 12V
+#### 📌 Section: "Battery Voltage Monitoring"
+
+**Fungsi**: Memantau tegangan baterai 12V dan menurunkannya agar aman untuk ADC MCU
 
 **Rangkaian pembagi tegangan:**
 ```
@@ -1422,6 +1660,11 @@ LED Katoda (-) → GND
 
 ## Langkah 7: Jumper Tegangan Pengapian
 
+#### 📌 Section: "Ignition Voltage Selector Jumper"
+
+**Komponen**: JP1 (3-Pin Header)  
+**Fungsi**: Memilih sumber tegangan (+5V atau +12V) untuk sensor tertentu
+
 ### JP1: 3-Pin Header (Ignition Voltage Selector)
 
 **Fungsi**: Pilih sumber tegangan untuk sensor tertentu
@@ -1438,7 +1681,11 @@ LED Katoda (-) → GND
 
 ---
 
-## Langkah 8: Test Points
+### Langkah 8: Test Points
+
+#### 📌 Section: "Test Points for Debugging"
+
+**Fungsi**: Titik akses mudah untuk mengukur sinyal penting selama debugging
 
 **Tambah test point untuk debugging:**
 

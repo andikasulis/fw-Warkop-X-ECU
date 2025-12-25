@@ -35,8 +35,11 @@
   - High-speed CAN transceiver, 1Mbps
   - LCSC: C38695
 
-### Sensors
-- **U9**: LPS25HB (HLGA-10)
+### Sensor Barometrik (U9)
+- **U9**: LPS25HB (HLGA-10) - **Sensor Tekanan Barometrik / Baro Sensor**
+  - Fungsi: Ukur tekanan atmosfer untuk kompensasi altitude
+  - Interface: I2C
+  - Location: 177.325,-75.8 (top layer)
   - Pressure sensor
   - LCSC: C94049
 
