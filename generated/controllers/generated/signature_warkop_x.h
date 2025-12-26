@@ -3,4 +3,4 @@
 //
 
 #define SIGNATURE_HASH 4104553484
-#define TS_SIGNATURE "rusEFI main.2025.12.25.warkop_x.4104553484"
+#define TS_SIGNATURE "rusEFI main.2025.12.26.warkop_x.4104553484"
